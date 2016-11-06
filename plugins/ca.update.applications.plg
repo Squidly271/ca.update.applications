@@ -37,7 +37,7 @@
   if ( is_file("/boot/config/plugins/community.applications.plg") ) {
     $version = trim(exec("/usr/local/sbin/plugin version /boot/config/plugins/community.applications.plg"));
     if ( strcmp($version,"2016.11.06") < 0 ) {
-      echo "Your installed version of Community Applications already includes Plugin Auto Update... Aborting Installation";
+      echo "Your installed version of Community Applications already includes Plugin Auto Update... Aborting Installation\n";
       exit(1);
     }
   }
