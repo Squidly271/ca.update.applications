@@ -40,7 +40,7 @@ case 'autoUpdatePlugins':
       }
     }
   }
-  writeJsonFile("/boot/config/plugins/community.applications/AutoUpdateSettings.json",$updateArray);
+  writeJsonFile("/boot/config/plugins/ca.update.applications/AutoUpdateSettings.json",$updateArray);
   break;
 
 }

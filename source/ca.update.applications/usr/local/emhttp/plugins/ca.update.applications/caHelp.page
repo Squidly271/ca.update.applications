@@ -3,7 +3,7 @@ Title="Manual"
 Icon="help.png"
 ---
 <script>
-var URL = "/plugins/ca.cleanup.appdata/include/manualExec.php";
+var URL = "/plugins/ca.update.applications/include/manualExec.php";
 $(function(){
   swal({
     title: "Downloading Manual",

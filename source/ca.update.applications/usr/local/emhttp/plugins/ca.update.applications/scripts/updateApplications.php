@@ -35,7 +35,7 @@ function notify($event,$subject,$description,$message="",$type="normal") {
   $command = '/usr/local/emhttp/plugins/dynamix/scripts/notify -e "'.$event.'" -s "'.$subject.'" -d "'.$description.'" -m "'.$message.'" -i "'.$type.'"';
   shell_exec($command);
 }
-$unRaidVersion = my_parse_ini_file("/etc/unraid-version");
+$unRaidVersion = parse_ini_file("/etc/unraid-version");
 $appList = json_decode(@file_get_contents($communityPaths['autoUpdateSettings']),true);
 if ( ! $appList ) {
   $appList['community.applications.plg'] = "true";
