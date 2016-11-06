@@ -4,14 +4,25 @@ Icon="ca.update.applications.png"
 ---
 <?
 require_once("/usr/local/emhttp/plugins/dynamix.plugin.manager/include/PluginHelpers.php");
+require_once("/usr/local/emhttp/plugins/ca.update.applications/include/caCredits.php");
 
 $plugin = "ca.update.applications";
+
+$installedVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /var/log/plugins/$plugin.plg");
+if ( is_file("/tmp/plugins/$plugin.plg") ) {
+  $upgradeVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /tmp/plugins/$plugin.plg");
+} else {
+  $upgradeVersion = "0";
+}
+if ( $installedVersion < $upgradeVersion ) {
+  $upgradeAvailable = "true";
+}
 
 $pluginsFolder = scandir("/var/log/plugins");
 
 # get the settings already selected
 
-$updateSettings = json_decode(@file_get_contents("/boot/config/plugins/ca.update.applications/AutoUpdateSettings.json"),true);
+$updateSettings = json_decode(@file_get_contents("/boot/config/plugins/$plugin/AutoUpdateSettings.json"),true);
 if ( ! $updateSettings ) {
   $updateSettings['community.applications.plg'] = "true";
   $updateSettings['fix.common.problems.plg'] = "true";
@@ -89,10 +100,35 @@ jQuery(document).ready(function() {
 var URL = "/plugins/<?=$plugin?>/include/exec.php";
 
 $(function() {
+  if ( "<?=$upgradeAvailable?>" == "true" ) {
+    $("#upgradeAvailable").show();
+  }
   changeGlobal();
   $("#notify").val('<?=$updateSettings['notify']?>');
   $("#delay").val('<?=$updateSettings['delay']?>');
 });
+
+function showCredits() {
+  myAlert("CA Auto Update Plugins","<?=$caCredits?>","/plugins/<?=$plugin?>/images/ca.update.applications.png","96x96", true, false, true);
+}
+
+function myAlert(description,textdescription,textimage,imagesize, outsideClick, showCancel, showConfirm, alertType) {
+  if ( !outsideClick ) outsideClick = false;
+  if ( !showCancel )   showCancel = false;
+  if ( !showConfirm )  showConfirm = false;
+  if ( imagesize == "" ) { imagesize = "80x80"; }
+  swal({
+    title: description,
+    text: textdescription,
+    imageUrl: textimage,
+    imageSize: imagesize,
+    allowOutsideClick: outsideClick,
+    showConfirmButton: showConfirm,
+    showCancelButton: showCancel,
+    type: alertType,
+    html: true
+  });
+}
 
 function apply() {
    var myvalue = "";
@@ -129,6 +165,7 @@ function changeApply() {
 > <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=40262.0" target="_blank">http://lime-technology.com/forum/index.php?topic=40262.0</a></center>
 > <center><font color='red'>For autoupdating to work, you <b>must</b> have <em>Plugin Version Notifications</em> enabled (ideally at least once per day) enabled within unRaid's Settings / Notification Settings.  Community Applications will check the plugin status daily (adjustable via the Dynamix Fixed Schedules Plugin) and upgrade any applicable plugins</font></center>
 
+<span id='upgradeAvailable' hidden><center> <font color='red'>An update to CA Cleanup Appdata is Available. Click <a href='/Plugins'>HERE</a> to install the update</center></font></span>
 <center>
 <strong>Send Notifications On Update?</strong>
 <select id='notify' size='1' onchange='changeApply();'>
@@ -158,7 +195,9 @@ function changeApply() {
 <a href="#" class="back-to-top" style="display: inline;">
 <img src='/plugins/community.applications/images/up.png' style='width:50px;height:50px' href="#" class="back-to-top"></img>
 </a>
+<a href="Settings/caHelp" target='_blank'>CA Manual</a><a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
 <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=40262.0" target="_blank">http://lime-technology.com/forum/index.php?topic=40262.0</a></center>
+<center>Plugin Version: <strong><?=$installedVersion?></strong></center>
 
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
