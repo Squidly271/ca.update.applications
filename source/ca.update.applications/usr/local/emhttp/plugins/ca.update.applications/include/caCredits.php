@@ -33,16 +33,6 @@ $caCredits = "
         <td><strong>bonienl</strong></td>
         <td>Additional Contributions</td>
       </tr>
-      <tr>
-        <td><img src='http://i.imgur.com/VFMJTol.jpg' width='48px' height='48px'></td>
-        <td><strong>Sparklyballs</strong></td>
-        <td>Additional Testing</td>
-      </tr>
-      <tr>
-        <td><img src='http://i.imgur.com/hpBxTJX.jpg' width='48px' height='48px'></td>
-        <td><strong>CHBMB</strong></td>
-        <td>Additional Testing</td>
-      </tr>
     </table></center>
     <br>
     <center><em><font size='1'>Copyright 2015-2016 Andrew Zawadzki</font></em></center>
