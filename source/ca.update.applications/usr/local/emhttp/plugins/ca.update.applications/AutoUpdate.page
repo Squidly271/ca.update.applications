@@ -1,6 +1,5 @@
-Menu="CA"
-Title="Auto Update Settings"
-Icon="ca.update.applications.png"
+Menu="AutoUpdateApps:1"
+Title="Plugin Settings"
 ---
 <?
 require_once("/usr/local/emhttp/plugins/dynamix.plugin.manager/include/PluginHelpers.php");
@@ -46,18 +45,25 @@ foreach ($pluginsFolder as $pluginFile) {
     } else {
       $selected = "";
     }
-    $displayOptions .= "<tr><td>$pluginFile</td>";
+    $displayOptions .= "<tr>";
     $displayOptions .= "<td><img src='/".icon(plugin("name","/var/log/plugins/$pluginFile"))."' width='48px'></td>";
     $displayOptions .= "<td>".Markdown(@file_get_contents("/usr/local/emhttp/plugins/".plugin("name","/var/log/plugins/$pluginFile")."/README.md"))."</td><td>";
-    $displayOptions .= "<select class='plugins' id='$pluginFile' onchange='changeApply();'>";
+/*     $displayOptions .= "<select class='plugins' id='$pluginFile' onchange='changeApply();'>";
     $displayOptions .= "<option>Don't Auto Update</option>";
     $displayOptions .= "<option value='$pluginFile' $selected>AutoUpdate</option>";
-    $displayoptions .= "</select></td></tr>";
+    $displayoptions .= "</select></td></tr>"; */
+    
+    $displayOptions .= "<div class='ca-switch-button-background autoUpdatePlugin' style='width:25px; height:11px;'onclick='toggleAutoStart(this);'>";
+    $class = $updateSettings[$pluginFile] ? "unRaidAutoButton" : null;
+    $displayOptions .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-plugin='$pluginFile'>";
+    $displayOptions .= "</div></div>";
+    $displayOptions .= $class ? "<span><center><font color='red'>Autoupdate ON</font></center></span>" : "<span><center>Autoupdate OFF</center></span>";
+    $displayOptions .= "</td></tr>";
   }
 }
 $displayOptions .= "</tbody></table>";
 ?>
-
+<link type="text/css" rel="stylesheet" href="/plugins/ca.update.applications/styles/switchbutton.css">
 <style>
 .back-to-top {
   background: none;
@@ -72,7 +78,9 @@ $displayOptions .= "</tbody></table>";
   text-decoration: none;
   color: #ffffff;
 }
-
+.unRaidAutoButton {
+  left: 11px;
+}
 </style>
 
 <script>
@@ -95,6 +103,15 @@ jQuery(document).ready(function() {
   })
 });
 
+function toggleAutoStart(el) {
+  $(el).find("div").toggleClass("unRaidAutoButton");
+  if ( $(el).find("div").hasClass("unRaidAutoButton") ) {
+    $(el).parent().find("span").html("<center><font color='red'>Autoupdate ON</font><center>");
+  } else {
+    $(el).parent().find("span").html("<center>Autoupdate OFF</center>");
+  }
+  changeApply();
+}
 
 
 var URL = "/plugins/<?=$plugin?>/include/exec.php";
@@ -131,12 +148,9 @@ function myAlert(description,textdescription,textimage,imagesize, outsideClick, 
 }
 
 function apply() {
-   var myvalue = "";
-  $('.plugins option:selected').each(function () {
-    var selectedValue = $(this).val();
-    if ( selectedValue != "Don't Auto Update") {
-      myvalue = myvalue + $(this).val() + "*";
-    }
+  var myvalue = "";
+  $('.unRaidAutoButton').each(function () {
+    myvalue = myvalue + $(this).data("plugin") + "*";
   });
   var globalUpdate = $("#allPlugins").val();
   var notify = $("#notify").val();
@@ -162,27 +176,26 @@ function changeApply() {
 </script>
 <FORM method="get" id="myForm">
 
-> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=40262.0" target="_blank">http://lime-technology.com/forum/index.php?topic=40262.0</a></center>
+> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=40262.0</a></center>
 > <center><font color='red'>For autoupdating to work, you <b>must</b> have <em>Plugin Version Notifications</em> enabled (ideally at least once per day) enabled within unRaid's Settings / Notification Settings.  Community Applications will check the plugin status daily (adjustable via the Dynamix Fixed Schedules Plugin) and upgrade any applicable plugins</font></center>
 
 <div id='upgradeAvailable' style='display:none'><center> <font color='red'>An update to CA Auto Update Plugins is Available. Click <a href='/Plugins'>HERE</a> to install the update</center></font></div>
-<center>
-<strong>Send Notifications On Update?</strong>
-<select id='notify' size='1' onchange='changeApply();'>
+
+<table>
+<tr><td width=20%><strong>Send Notifications On Update?</strong></td>
+<td><select id='notify' size='1' onchange='changeApply();'>
   <option value='yes'>Yes</option>
   <option value='no'>No</option>
-</select>
-<br><br>
-<strong>Delay in days before updating applications:</strong>
-<input type='number' id='delay' style='width:20px' oninput='changeApply();'>
-<br><br>
-<strong>Auto Update All Plugins?</strong>
-<select id='allPlugins' size='1' onchange='changeGlobal();'>
+</select></td>
+<tr><td><strong>Delay in days before updating applications:</strong></td>
+<td><input type='number' id='delay' style='width:20px' oninput='changeApply();'></td>
+<tr><td><strong>Auto Update All Plugins?</strong></td>
+<td><select id='allPlugins' size='1' onchange='changeGlobal();'>
   <option value='no'>No</option>
   <option value='yes' <?=$globalUpdate?>>Yes</option>
-</select>
+</select></td>
+</tr></table>
 </center>
-> <center>Turning on this option will automatically update any plugin which has an update available for it.  With this option turned off, you may individually select which plugins to auto update</center>
 
 <div id='pluginList'>
 <?=$displayOptions?>
@@ -196,7 +209,7 @@ function changeApply() {
 <img src='/plugins/community.applications/images/up.png' style='width:50px;height:50px' href="#" class="back-to-top"></img>
 </a>
 <a href="Settings/caHelp" target='_blank'>CA Manual</a><a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
-<center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=40262.0" target="_blank">http://lime-technology.com/forum/index.php?topic=40262.0</a></center>
+<center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a></center>
 <center>Plugin Version: <strong><?=$installedVersion?></strong></center>
 
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>

@@ -43,5 +43,20 @@ case 'autoUpdatePlugins':
   writeJsonFile("/boot/config/plugins/ca.update.applications/AutoUpdateSettings.json",$updateArray);
   break;
 
+case 'dockerApply':
+  $settings                     = getPostArray("dockerSettings");
+  $containers                   = getPostArray("autoUpdate");
+  
+  foreach($containers as $container) {
+    $tmp['name'] = $container;
+    $tmp['update'] = true;
+    $dockerSettings['containers'][$container] = $tmp;
+  }
+  
+  foreach ($settings as $setting) {
+    $dockerSettings['global'][$setting[0]] = $setting[1];
+  }
+  writeJsonFile("/boot/config/plugins/ca.update.applications/DockerUpdateSettings.json",$dockerSettings);
+  break;
 }
 ?>

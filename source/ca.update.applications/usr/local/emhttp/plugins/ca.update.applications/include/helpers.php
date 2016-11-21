@@ -14,7 +14,9 @@
 function getPost($setting,$default) {
   return isset($_POST[$setting]) ? urldecode(($_POST[$setting])) : $default;
 }
-
+function getPostArray($setting) {
+  return $_POST[$setting];
+}
 ##################################################################
 #                                                                #
 # 2 Functions to avoid typing the same lines over and over again #
