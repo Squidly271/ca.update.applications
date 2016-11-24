@@ -30,8 +30,10 @@ case 'autoUpdatePlugins':
   $updateArray['notify'] = getPost("notify","yes");
   $updateArray['delay']  = getPost("delay","3");
   $updateArray['Global'] = ( $globalUpdate == "yes" ) ? "true" : "false";
-
-
+  $pluginCron            = getPostArray("pluginCron");
+  foreach ($pluginCron as $setting) {
+    $updateArray['cron'][$setting[0]] = $setting[1];
+  }
   $plugins = explode("*",$pluginList);
   if ( is_array($plugins) ) {
     foreach ($plugins as $plg) {
@@ -46,7 +48,11 @@ case 'autoUpdatePlugins':
 case 'dockerApply':
   $settings                     = getPostArray("dockerSettings");
   $containers                   = getPostArray("autoUpdate");
+  $dockerCron                   = getPostArray("dockerCron");
   
+  foreach($dockerCron as $cronSetting) {
+    $dockerSettings['cron'][$cronSetting[0]] = $cronSetting[1];
+  }  
   foreach($containers as $container) {
     $tmp['name'] = $container;
     $tmp['update'] = true;

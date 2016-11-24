@@ -1,7 +1,13 @@
 Menu="AutoUpdateApps:1"
-Title="Plugin Settings"
+Title="Plugin Auto Update Settings"
 ---
 <?
+###############################################################
+#                                                             #
+# Community Applications copyright 2015-2016, Andrew Zawadzki #
+#                                                             #
+###############################################################
+
 require_once("/usr/local/emhttp/plugins/dynamix.plugin.manager/include/PluginHelpers.php");
 require_once("/usr/local/emhttp/plugins/ca.update.applications/include/caCredits.php");
 
@@ -26,9 +32,11 @@ if ( ! $updateSettings ) {
   $updateSettings['community.applications.plg'] = "true";
   $updateSettings['fix.common.problems.plg'] = "true";
   $updateSettings['ca.update.applications.plg'] = "true";
+  $updateSettings['pluginCronFrequency'] = "Daily";
 }
 if ( ! $updateSettings['notify'] ) { $updateSettings['notify'] = "yes"; }
 if ( ! isset($updateSettings['delay']) ) { $updateSettings['delay'] = "3"; }
+if ( ! $updateSettings['pluginCronFrequency'] ) { $updateSettings['pluginCronFrequency'] = "Daily"; }
 if ( $updateSettings['Global'] == "true" ) {
   $globalUpdate = "selected";
 } 
@@ -48,11 +56,6 @@ foreach ($pluginsFolder as $pluginFile) {
     $displayOptions .= "<tr>";
     $displayOptions .= "<td><img src='/".icon(plugin("name","/var/log/plugins/$pluginFile"))."' width='48px'></td>";
     $displayOptions .= "<td>".Markdown(@file_get_contents("/usr/local/emhttp/plugins/".plugin("name","/var/log/plugins/$pluginFile")."/README.md"))."</td><td>";
-/*     $displayOptions .= "<select class='plugins' id='$pluginFile' onchange='changeApply();'>";
-    $displayOptions .= "<option>Don't Auto Update</option>";
-    $displayOptions .= "<option value='$pluginFile' $selected>AutoUpdate</option>";
-    $displayoptions .= "</select></td></tr>"; */
-    
     $displayOptions .= "<div class='ca-switch-button-background autoUpdatePlugin' style='width:25px; height:11px;'onclick='toggleAutoStart(this);'>";
     $class = $updateSettings[$pluginFile] ? "unRaidAutoButton" : null;
     $displayOptions .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-plugin='$pluginFile'>";
@@ -62,6 +65,37 @@ foreach ($pluginsFolder as $pluginFile) {
   }
 }
 $displayOptions .= "</tbody></table>";
+$daysArray = array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
+$days = array_keys($daysArray);
+$dayCounter = 0;
+foreach ($daysArray as $day) {
+  $pluginDayScript .= "<option value='$dayCounter'>$day</option>";
+  ++$dayCounter;
+}
+$dayOfMonthCounter = 1;
+for ($i = 1; $i < 32; $i++) {
+  $pluginDayOfMonth .= "<option value='$i'>$i</option>";
+}
+for ($i = 0; $i <24; $i++) {
+  $human = $i;
+  if ( $i > 12 ) {
+    $human = $i - 12;
+  }
+  if ( $i == 0 ) {
+    $human = 12;
+  }
+  if ( $i > 11 ) {
+    $human .= " PM";
+  } else {
+    $human .= " AM";
+  }
+  $pluginCronHour .= "<option value='$i'>$human</option>";
+}
+for ($i = 0; $i<60; $i++) {
+  $pluginMinute .= "<option value='$i'>$i</option>";
+}
+  
+
 ?>
 <link type="text/css" rel="stylesheet" href="/plugins/ca.update.applications/styles/switchbutton.css">
 <style>
@@ -117,13 +151,63 @@ function toggleAutoStart(el) {
 var URL = "/plugins/<?=$plugin?>/include/exec.php";
 
 $(function() {
+  $(".pluginCron").change(function() {
+    validateCron("plugin");
+    changeApply();
+  });
+  
+  
   if ( "<?=$upgradeAvailable?>" == "true" ) {
     $("#upgradeAvailable").show();
   }
   changeGlobal();
   $("#notify").val('<?=$updateSettings['notify']?>');
   $("#delay").val('<?=$updateSettings['delay']?>');
+  $("#pluginCronFrequency").val('<?=$updateSettings['pluginCronFrequency']?>');
+  validateCron("plugin");
 });
+
+function validateCron(pagetype) {
+  var baseID = "#"+pagetype;
+  var frequency = $(baseID+"CronFrequency").val();
+  switch ( frequency ) {
+    case "disabled":
+      $(baseID+"CronDay").prop("disabled",true);
+      $(baseID+"CronDayOfMonth").prop("disabled",true);
+      $(baseID+"CronHour").prop("disabled",true);
+      $(baseID+"CronMinute").prop("disabled",true);
+      $(baseID+"CronCustom").prop("disabled",true);
+      break;
+    case "Daily":
+      $(baseID+"CronDay").prop("disabled",true);
+      $(baseID+"CronDayOfMonth").prop("disabled",true);
+      $(baseID+"CronHour").prop("disabled",false);
+      $(baseID+"CronMinute").prop("disabled",false);
+      $(baseID+"CronCustom").prop("disabled",true);
+      break;
+    case "Weekly":
+      $(baseID+"CronDay").prop("disabled",false);
+      $(baseID+"CronDayOfMonth").prop("disabled",true);
+      $(baseID+"CronHour").prop("disabled",false);
+      $(baseID+"CronMinute").prop("disabled",false);
+      $(baseID+"CronCustom").prop("disabled",true);
+      break;
+    case "Monthly":
+      $(baseID+"CronDay").prop("disabled",true);
+      $(baseID+"CronDayOfMonth").prop("disabled",false);
+      $(baseID+"CronHour").prop("disabled",false);
+      $(baseID+"CronMinute").prop("disabled",false);
+      $(baseID+"CronCustom").prop("disabled",true);
+      break;
+    case "Custom":
+      $(baseID+"CronDay").prop("disabled",true);
+      $(baseID+"CronDayOfMonth").prop("disabled",true);
+      $(baseID+"CronHour").prop("disabled",true);
+      $(baseID+"CronMinute").prop("disabled",true);
+      $(baseID+"CronCustom").prop("disabled",false);
+      break;
+  }
+}
 
 function showCredits() {
   myAlert("CA Auto Update Plugins","<?=$caCredits?>","/plugins/<?=$plugin?>/images/ca.update.applications.png","96x96", true, false, true);
@@ -155,8 +239,20 @@ function apply() {
   var globalUpdate = $("#allPlugins").val();
   var notify = $("#notify").val();
   var delay = $("#delay").val();
-  $.post(URL,{action:'autoUpdatePlugins',globalUpdate:globalUpdate,pluginList:myvalue,notify:notify,delay:delay});
+  var pluginCron = getCronSettings("plugin");
+  $.post(URL,{action:'autoUpdatePlugins',globalUpdate:globalUpdate,pluginList:myvalue,notify:notify,delay:delay,pluginCron:pluginCron});
   $(".applyButton").prop("disabled",true);
+}
+
+function getCronSettings(pagetype) {
+  var cronSettings = new Array();
+  $("."+pagetype+"Cron").each(function() {
+    var settingID = $(this).attr("id");
+    var settingVal = $(this).val();
+    var settings = new Array(settingID,settingVal);
+    cronSettings.push(settings);
+  });
+  return cronSettings;
 }
 
 function changeGlobal() {
@@ -176,13 +272,15 @@ function changeApply() {
 </script>
 <FORM method="get" id="myForm">
 
-> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=40262.0</a></center>
+> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a></center>
 > <center><font color='red'>For autoupdating to work, you <b>must</b> have <em>Plugin Version Notifications</em> enabled (ideally at least once per day) enabled within unRaid's Settings / Notification Settings.  Community Applications will check the plugin status daily (adjustable via the Dynamix Fixed Schedules Plugin) and upgrade any applicable plugins</font></center>
 
 <div id='upgradeAvailable' style='display:none'><center> <font color='red'>An update to CA Auto Update Plugins is Available. Click <a href='/Plugins'>HERE</a> to install the update</center></font></div>
 
+<div>
+<div style='width:45%;float:left;'>
 <table>
-<tr><td width=20%><strong>Send Notifications On Update?</strong></td>
+<tr><td><strong>Send Notifications On Update?</strong></td>
 <td><select id='notify' size='1' onchange='changeApply();'>
   <option value='yes'>Yes</option>
   <option value='no'>No</option>
@@ -194,24 +292,61 @@ function changeApply() {
   <option value='no'>No</option>
   <option value='yes' <?=$globalUpdate?>>Yes</option>
 </select></td>
+<tr><td><strong>Update Check Frequency:</strong></td>
+<td><select id='pluginCronFrequency' class='pluginCron'>
+  <option value='disabled'>Disabled</option>
+  <option value='Daily'>Daily</option>
+  <option value='Weekly'>Weekly</option>
+  <option value='Monthly'>Monthly</option>
+  <option value='Custom'>Custom</option>
+</select></td></tr>
 </tr></table>
+</div>
+<div style='width:45%;float:left;'>
+<table>
+
+<tr><td><strong>Day Of Week:</strong></td>
+<td><select id='pluginCronDay' class='pluginCron'>
+<?=$pluginDayScript?>
+</select></td></tr>
+<tr><td><strong>Day Of Month:</strong></td>
+<td><select id='pluginCronDayOfMonth' class='pluginCron'>
+<?=$pluginDayOfMonth?>
+</select></td></tr>
+<tr><td><strong>Hour:</strong></td>
+<td><select id='pluginCronHour' class='pluginCron'>
+<?=$pluginCronHour?>
+</select></td></tr>
+<tr><td><strong>Minute:</strong></td>
+<td><select id='pluginCronMinute' class='pluginCron'>
+<?=$pluginMinute?>
+</select></td></tr>
+<tr><td><strong>Custom:</strong></td>
+<td><input type='text' id='pluginCronCustom' class='pluginCron'></td></tr>
+</table>
+</div></div>
 </center>
 
 <div id='pluginList'>
 <?=$displayOptions?>
 </div>
-
+<div>
+<table></table>
 <input type='button' value='Apply' class='applyButton' disabled onclick='apply();'><input type='button' value=' Done ' onclick="location.href='../Settings'">
-
-
 <span id='settings'></span>
 <a href="#" class="back-to-top" style="display: inline;">
 <img src='/plugins/community.applications/images/up.png' style='width:50px;height:50px' href="#" class="back-to-top"></img>
-</a>
+</a></div>
+<div>
+
+<table><tr><td></td></tr><tr><td></td></tr></table>
+
+</div>
 <a href="Settings/caHelp" target='_blank'>CA Manual</a><a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
 <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a></center>
 <center>Plugin Version: <strong><?=$installedVersion?></strong></center>
 
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
+
 
 </FORM>
