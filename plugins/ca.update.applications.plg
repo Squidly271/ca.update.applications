@@ -38,12 +38,6 @@
     echo "Your installed version of Community Applications already includes Plugin Auto Update... Aborting Installation\n";
     exit(1);
   }
-  if ( is_file("/etc/cron.daily/updateApplications.sh") ) {
-    echo "Upgrading from previous cron system.  Plugin autoupdates will happen at Midnight Daily.  This time can now be adjusted directly within the plugin\n\n";
-    unlink("/etc/cron.daily/updateApplications.sh");
-    $cron = "# Generated cron settings for plugin autoupdates\n0 0 * * * /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.php >dev/null 2>&1\n";
-    file_put_contents("/boot/config/plugins/ca.update.applications/plugin_update.cron",$cron);
-  }
 ?>
 ]]>
 </INLINE>
@@ -70,7 +64,7 @@ The 'post-install' script
 <FILE Run="/bin/bash">
 <INLINE>
 mv /boot/config/plugins/community.applications/AutoUpdateSettings.json /boot/config/plugins/ca.update.applications/AutoUpdateSettings.json > /dev/null 2> /dev/null
-/usr/local/sbin/update_cron
+cp /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.sh /etc/cron.daily/updateApplications.sh
 echo ""
 echo "----------------------------------------------------"
 echo " &name; has been installed."
@@ -90,7 +84,6 @@ rm /etc/cron.daily/updateApplications.sh
 removepkg &name;-&version;-x86_64-1
 rm -rf &plugdir;
 rm -rf /boot/config/plugins/&name;
-exec("/usr/local/sbin/update_cron");
 </INLINE>
 </FILE> 
 </PLUGIN>
