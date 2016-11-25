@@ -94,8 +94,12 @@ for ($i = 0; $i <24; $i++) {
 for ($i = 0; $i<60; $i++) {
   $pluginMinute .= "<option value='$i'>$i</option>";
 }
-  
-
+if ( is_array($updateSettings['cron']) ) {
+  $cronSettings = array_keys($updateSettings['cron']);
+  foreach ($cronSettings as $setting) {
+    $pluginCronScript .= "$('#$setting').val('".$updateSettings['cron'][$setting]."');";
+  }
+}
 ?>
 <link type="text/css" rel="stylesheet" href="/plugins/ca.update.applications/styles/switchbutton.css">
 <style>
@@ -164,6 +168,7 @@ $(function() {
   $("#notify").val('<?=$updateSettings['notify']?>');
   $("#delay").val('<?=$updateSettings['delay']?>');
   $("#pluginCronFrequency").val('<?=$updateSettings['pluginCronFrequency']?>');
+  <?=$pluginCronScript?>
   validateCron("plugin");
 });
 
@@ -278,8 +283,7 @@ function changeApply() {
 </script>
 <FORM method="get" id="myForm">
 
-> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a></center>
-> <center><font color='red'>For autoupdating to work, you <b>must</b> have <em>Plugin Version Notifications</em> enabled (ideally at least once per day) enabled within unRaid's Settings / Notification Settings.  Community Applications will check the plugin status daily (adjustable via the Dynamix Fixed Schedules Plugin) and upgrade any applicable plugins</font></center>
+> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a> or read the <a href="Settings/caHelp" target='_blank'>CA Manual</a></center>
 
 <div id='upgradeAvailable' style='display:none'><center> <font color='red'>An update to CA Auto Update Plugins is Available. Click <a href='/Plugins'>HERE</a> to install the update</center></font></div>
 

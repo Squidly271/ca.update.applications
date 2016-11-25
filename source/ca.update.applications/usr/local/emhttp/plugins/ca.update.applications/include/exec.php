@@ -78,7 +78,7 @@ case 'autoUpdatePlugins':
   
   $pluginCron = "# Generated cron settings for plugin autoupdates\n";
   $generatedCron = makeCron($frequency,$day,$dayOfMonth,$hour,$minute,$custom);
-  $pluginCron .= "$generatedCron /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.php >dev/null 2>&1\n";
+  $pluginCron .= "$generatedCron /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.php >/dev/null 2>&1\n";
   
   if ( $generatedCron ) {
     file_put_contents("/boot/config/plugins/ca.update.applications/plugin_update.cron",$pluginCron);
@@ -115,7 +115,7 @@ case 'dockerApply':
   
   $dockerCron = "# Generated cron settings for docker autoupdates\n";
   $generatedCron = makeCron($frequency,$day,$dayOfMonth,$hour,$minute,$custom);
-  $dockerCron .= "$generatedCron /usr/local/emhttp/plugins/ca.update.applications/scripts/updateDocker.php >dev/null 2>&1\n";
+  $dockerCron .= "$generatedCron /usr/local/emhttp/plugins/ca.update.applications/scripts/updateDocker.php >/dev/null 2>&1\n";
   
   if ( $generatedCron ) {
     file_put_contents("/boot/config/plugins/ca.update.applications/docker_update.cron",$dockerCron);
@@ -123,6 +123,7 @@ case 'dockerApply':
     @unlink("/boot/config/plugins/ca.update.applications/docker_update.cron");
   }
   writeJsonFile("/boot/config/plugins/ca.update.applications/DockerUpdateSettings.json",$dockerSettings);
+  exec("/usr/local/sbin/update_cron");
   break;
 }
 ?>

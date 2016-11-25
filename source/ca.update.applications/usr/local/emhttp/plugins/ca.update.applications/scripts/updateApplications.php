@@ -7,7 +7,7 @@ $communityPaths['autoUpdateSettings']            = "/boot/config/plugins/ca.upda
 
 function logger($string) {
   $string = escapeshellarg($string);
-  shell_exec("logger $string");
+  shell_exec("logger -t 'Plugin Auto Update' $string");
 }
 
 function checkPluginUpdate($filename) {
@@ -47,7 +47,6 @@ if ( ! isset($appList['delay']) ) {
 }
 
 $pluginsInstalled = array("ca.update.applications.plg") + array_diff(scandir("/var/log/plugins"),array(".","..","ca.update.applications.plg"));
-exec("logger Community Applications Auto Update Running");
 exec("logger Checking for available plugin updates");
 exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin checkall");
 $currentDate = date_create(now);
@@ -99,4 +98,5 @@ foreach ($pluginsInstalled  as $plugin) {
     }
   }
 }
+logger("Community Applications Plugin Auto Update finished");
 ?>
