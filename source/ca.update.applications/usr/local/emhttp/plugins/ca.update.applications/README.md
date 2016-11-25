@@ -1,4 +1,3 @@
-####CA AutoUpdate Plugins###
-Part of the CA family, AutoUpdate Plugins will keep your plugins up to date, with options to only auto update certain plugins, selectable delay in days before updating, etc
-
+####CA Auto Update Applications###
+Part of the CA family, Auto Update Applications will keep your selected plugins and docker applications up to date
 
