@@ -48,6 +48,8 @@ if ( ! isset($appList['delay']) ) {
 
 $pluginsInstalled = array("ca.update.applications.plg") + array_diff(scandir("/var/log/plugins"),array(".","..","ca.update.applications.plg"));
 exec("logger Community Applications Auto Update Running");
+exec("logger Checking for available plugin updates");
+exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin checkall");
 $currentDate = date_create(now);
 foreach ($pluginsInstalled  as $plugin) {
   if ( is_file($communityPaths['autoUpdateKillSwitch']) ) {
@@ -61,7 +63,6 @@ foreach ($pluginsInstalled  as $plugin) {
   if ( $plugin == "unRAIDServer.plg" ) { continue; }
   if ( checkPluginUpdate($plugin) ) {
     if ( $appList['Global'] == "true" || $appList[$plugin] ) {
-      exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin check '$plugin'"); # in case of multiple releases, get the latest one.
       $pluginVersion = plugin("version","/tmp/plugins/$plugin");
       $pluginVersionOriginal = $pluginVersion;
       $installedVersion = plugin("version","/var/log/plugins/$plugin");
