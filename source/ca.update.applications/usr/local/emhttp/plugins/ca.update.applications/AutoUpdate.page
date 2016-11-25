@@ -232,15 +232,21 @@ function myAlert(description,textdescription,textimage,imagesize, outsideClick, 
 }
 
 function apply() {
-  var myvalue = "";
+  var myvalue = new Array();
   $('.unRaidAutoButton').each(function () {
-    myvalue = myvalue + $(this).data("plugin") + "*";
+    var plugin = $(this).data("plugin");
+    var pluginSetting = new Array(plugin);
+    myvalue.push(pluginSetting);
   });
   var globalUpdate = $("#allPlugins").val();
   var notify = $("#notify").val();
   var delay = $("#delay").val();
   var pluginCron = getCronSettings("plugin");
-  $.post(URL,{action:'autoUpdatePlugins',globalUpdate:globalUpdate,pluginList:myvalue,notify:notify,delay:delay,pluginCron:pluginCron});
+  $.post(URL,{action:'autoUpdatePlugins',globalUpdate:globalUpdate,pluginList:myvalue,notify:notify,delay:delay,pluginCron:pluginCron},function(data) {
+    if (data) {
+      $("#testing").html(data);
+    }
+  });
   $(".applyButton").prop("disabled",true);
 }
 
@@ -348,5 +354,5 @@ function changeApply() {
 
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
-
+<span id='testing'></span>
 </FORM>
