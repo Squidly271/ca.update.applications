@@ -285,7 +285,7 @@ function changeApply() {
 
 > <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a> or read the <a href="Settings/caHelp" target='_blank'>CA Manual</a></center>
 
-<div id='upgradeAvailable' style='display:none'><center> <font color='red'>An update to CA Auto Update Plugins is Available. Click <a href='/Plugins'>HERE</a> to install the update</center></font></div>
+<div id='upgradeAvailable' style='display:none'><center> <font color='red'>An update to CA Auto Update Applications is Available. Click <a href='/Plugins'>HERE</a> to install the update</center></font><br><br></div>
 
 <div>
 <div style='width:45%;float:left;'>
