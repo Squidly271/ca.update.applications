@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2016.11.25d">
-<!ENTITY md5       "c48d77d436884acb0fac0ed7717c02f5">
+<!ENTITY version   "2016.11.26>
+<!ENTITY md5       "6bdf34f389b92742ac999e8974edc979">
 <!ENTITY launch    "Settings/AutoUpdate">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -47,7 +47,7 @@
     echo "Upgrading from previous cron system.  Plugin autoupdates will happen at Midnight Daily.  This time can now be adjusted directly within the plugin\n\n";
     @unlink("/etc/cron.daily/updateApplications.sh");
     @unlink("/usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.sh");
-    $cron = "# Generated cron settings for plugin autoupdates\n0 0 * * * /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.php >dev/null 2>&1\n";
+    $cron = "# Generated cron settings for plugin autoupdates\n0 0 * * * /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.php >/dev/null 2>&1\n";
     file_put_contents("/boot/config/plugins/ca.update.applications/plugin_update.cron",$cron);
   }
 ?>
