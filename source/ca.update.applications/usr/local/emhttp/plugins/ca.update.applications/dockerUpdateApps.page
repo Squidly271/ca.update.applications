@@ -84,7 +84,6 @@ var URL = "/plugins/<?=$plugin?>/include/exec.php";
 
 $(function() {
   if ( '<?=$dockerRunning?>' == "false" ) {
-    $("#testing").html("<center><font size='3' color='purple'>Docker Must Be Enabled For This Module To Operate</font></center>");
     $('.dockerSettings').prop("disabled",true);
     $('.dockerCron').prop("disabled",true);
   } else {
