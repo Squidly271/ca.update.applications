@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2016.11.25">
+<!ENTITY version   "2016.11.25a">
 <!ENTITY md5       "12bf0e00eaf50eb437304f9ba2305b84">
 <!ENTITY launch    "Settings/AutoUpdate">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">

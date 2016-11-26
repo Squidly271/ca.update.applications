@@ -25,39 +25,47 @@ function searchArray($array,$key,$value) {
 
 require_once("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerClient.php");
 
+$dockerRunning = is_dir("/var/lib/docker/tmp") ? "true" : "false";
+
 $dockerUpdateSettings = json_decode(@file_get_contents("/boot/config/plugins/ca.update.applications/DockerUpdateSettings.json"),true);
 if ( ! $dockerUpdateSettings['global']['dockerNotify'] )    { $dockerUpdateSettings['global']['dockerNotify'] = "yes"; }
 if ( ! $dockerUpdateSettings['global']['dockerUpdateAll'] ) { $dockerUpdateSettings['global']['dockerUpdateAll'] = "no"; }
 
-$DockerTemplates = new DockerTemplates();
-$info = $DockerTemplates->getAllInfo();
-$DockerClient = new DockerClient();
-$moreInfo = $DockerClient->getDockerContainers();
+if ( $dockerRunning == "true" ) {
+  $DockerTemplates = new DockerTemplates();
+  $info = $DockerTemplates->getAllInfo();
+  $DockerClient = new DockerClient();
+  $moreInfo = $DockerClient->getDockerContainers();
 
-$dockerSettings = "<table><tr>";
-$containerNames = array_keys($info);
+  $dockerSettings = "<table><tr>";
+  $containerNames = array_keys($info);
 
-foreach ($containerNames as $container) {
-  $class = $dockerUpdateSettings['containers'][$container]['update'] ? "unRaidDockerButton" : null;
-  $index = searchArray($moreInfo,"Name",$container);
-  $repository = ($index === false) ? "Unknown" : $moreInfo[$index]['Image'];
-  $dockerSettings .= "<td width:25%;>";
-  $dockerSettings .= "<img src='".$info[$container]['icon']."' width=48px; height=48px;></td>";
-  $dockerSettings .= "<td><strong>$container</strong><br>$repository</td>";
-  $dockerSettings .= "<td><div class='ca-switch-button-background autoUpdateDocker' style='width:25px; height:11px;'onclick='toggleDockerAutoStart(this);'>";
-  $dockerSettings .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-docker='$container'>";
-  $dockerSettings .= "</div></div>";
-  $span = $class ? "<span><font color='red'>Auto Update ON</font></span>" : "<span>Auto Update OFF</span>";
-  $dockerSettings .= "$span</td><td>";
-  if ( $column == 2 ) {
-    $dockerSettings .= "</td></tr><tr>";
-    $column = 0;
-  } else {
-    ++$column;
-    $dockerSettings .= "</td><td>&nbsp;</td><td style='border-right:solid thin;'>&nbsp;</td> <td>&nbsp;</td><td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>   ";
+  foreach ($containerNames as $container) {
+    $class = $dockerUpdateSettings['containers'][$container]['update'] ? "unRaidDockerButton" : null;
+    $index = searchArray($moreInfo,"Name",$container);
+    $repository = ($index === false) ? "Unknown" : $moreInfo[$index]['Image'];
+    $dockerSettings .= "<td width:25%;>";
+    $dockerSettings .= "<img src='".$info[$container]['icon']."' width=48px; height=48px;></td>";
+    $dockerSettings .= "<td><strong>$container</strong><br>$repository</td>";
+    $dockerSettings .= "<td><div class='ca-switch-button-background autoUpdateDocker' style='width:25px; height:11px;'onclick='toggleDockerAutoStart(this);'>";
+    $dockerSettings .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-docker='$container'>";
+    $dockerSettings .= "</div></div>";
+    $span = $class ? "<span><font color='red'>Auto Update ON</font></span>" : "<span>Auto Update OFF</span>";
+    $dockerSettings .= "$span</td><td>";
+    if ( $column == 2 ) {
+      $dockerSettings .= "</td></tr><tr>";
+      $column = 0;
+    } else {
+      ++$column;
+      $dockerSettings .= "</td><td>&nbsp;</td><td style='border-right:solid thin;'>&nbsp;</td> <td>&nbsp;</td><td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>   ";
+    }
   }
+  $dockerSettings .= "</table>";
+} else {
+  $dockerSettings = "<table><tr><td><center><font size='5' color='purple'>Docker Must Be Enabled For This Module To Operate</font></center></td></tr></table>";
+  $dockerUpdateSettings['global']['dockerUpdateAll'] = "no";
+  $dockerUpdateSettings['cron']['dockerCronFrequency'] = "disabled";
 }
-$dockerSettings .= "</table>";
 if ( is_array($dockerUpdateSettings['cron']) ) {
   $dockerCronSettings = array_keys($dockerUpdateSettings['cron']);
   foreach ($dockerCronSettings as $setting) {
@@ -75,6 +83,14 @@ if ( is_array($dockerUpdateSettings['cron']) ) {
 var URL = "/plugins/<?=$plugin?>/include/exec.php";
 
 $(function() {
+  if ( '<?=$dockerRunning?>' == "false" ) {
+    $("#testing").html("<center><font size='3' color='purple'>Docker Must Be Enabled For This Module To Operate</font></center>");
+    $('.dockerSettings').prop("disabled",true);
+    $('.dockerCron').prop("disabled",true);
+  } else {
+    <?=$dockerCronScript?>
+  }
+    
   $(".dockerCron").change(function() {
     validateCron("docker");
     $("#dockerApply").prop("disabled",false);
@@ -82,7 +98,6 @@ $(function() {
 
   $("#dockerNotify").val("<?=$dockerUpdateSettings['global']['dockerNotify']?>");
   $("#dockerUpdateAll").val("<?=$dockerUpdateSettings['global']['dockerUpdateAll']?>");
-  <?=$dockerCronScript?>
   
   if ( "<?=$dockerUpdateSettings['global']['dockerUpdateAll']?>" == "yes" ) {
     $("#dockerApps").hide();
