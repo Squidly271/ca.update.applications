@@ -154,7 +154,7 @@ function toggleAll() {
     <option value='no'>No</option>
     </select></td>
 </tr>
-<tr><td><strong>Update Check Frequency:</strong></td>
+<tr><td><strong>Update Check Frequency:</strong><br><font color='purple' size='0'>When selected an update time, ensure it does not overlap<br> with a time given for CA Backup Appdata</font></td>
 <td><select id='dockerCronFrequency' class='dockerCron'>
   <option value='disabled'>Disabled</option>
   <option value='Daily'>Daily</option>

@@ -47,7 +47,7 @@ if ( ! isset($appList['delay']) ) {
 }
 
 $pluginsInstalled = array("ca.update.applications.plg") + array_diff(scandir("/var/log/plugins"),array(".","..","ca.update.applications.plg"));
-exec("logger Checking for available plugin updates");
+logger("Checking for available plugin updates");
 exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin checkall");
 $currentDate = date_create(now);
 foreach ($pluginsInstalled  as $plugin) {

@@ -13,6 +13,11 @@ function logger($string) {
   shell_exec("logger -t 'Docker Auto Update' $string");
 }
 
+function notify($event,$subject,$description,$message="",$type="normal") {
+  $command = '/usr/local/emhttp/plugins/dynamix/scripts/notify -e "'.$event.'" -s "'.$subject.'" -d "'.$description.'" -m "'.$message.'" -i "'.$type.'"';
+  shell_exec($command);
+}
+
 # Check for available docker updates
 
 logger("Community Applications Docker Autoupdate running");

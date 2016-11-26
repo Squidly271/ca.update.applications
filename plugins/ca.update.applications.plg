@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2016.11.11">
-<!ENTITY md5       "51649bcdce6afede45b8f4e90613c384">
+<!ENTITY version   "2016.11.25">
+<!ENTITY md5       "12bf0e00eaf50eb437304f9ba2305b84">
 <!ENTITY launch    "Settings/AutoUpdate">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,11 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2016.11.25
+- Added Docker App autoupdates
+- Added Selectable run times for Plugin and Docker updates
+- Fixed Under certain circumstances, plugin updates could get installed prior to age requirements
+
 ###2016.11.11
 - Initial Release
 
@@ -25,18 +30,25 @@
 <?
   $version = parse_ini_file("/etc/unraid-version");
   
-  if ( version_compare($version['version'],"6.1.0", "<") )
+  if ( version_compare($version['version'],"6.2.0", "<") )
   {
-    echo "********************************************************************\n";
+    echo "*********************************************************************************************\n";
     echo "\n";
-    echo "Community Applications Requires unRaid version 6.1 or greater to run\n";
+    echo "Community Applications Auto Update Applications Requires unRaid version 6.2 or greater to run\n";
     echo "\n";
-    echo "********************************************************************\n";
+    echo "*********************************************************************************************\n";
     exit(1);
   }
   if ( is_file("/usr/local/emhttp/plugins/community.applications/Backup.page") ) {
     echo "Your installed version of Community Applications already includes Plugin Auto Update... Aborting Installation\n";
     exit(1);
+  }
+  if ( is_file("/usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.sh") ) {
+    echo "Upgrading from previous cron system.  Plugin autoupdates will happen at Midnight Daily.  This time can now be adjusted directly within the plugin\n\n";
+    @unlink("/etc/cron.daily/updateApplications.sh");
+    @unlink("/usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.sh");
+    $cron = "# Generated cron settings for plugin autoupdates\n0 0 * * * /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.php >dev/null 2>&1\n";
+    file_put_contents("/boot/config/plugins/ca.update.applications/plugin_update.cron",$cron);
   }
 ?>
 ]]>
@@ -64,7 +76,7 @@ The 'post-install' script
 <FILE Run="/bin/bash">
 <INLINE>
 mv /boot/config/plugins/community.applications/AutoUpdateSettings.json /boot/config/plugins/ca.update.applications/AutoUpdateSettings.json > /dev/null 2> /dev/null
-cp /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.sh /etc/cron.daily/updateApplications.sh
+/usr/local/sbin/update_cron
 echo ""
 echo "----------------------------------------------------"
 echo " &name; has been installed."
@@ -84,6 +96,7 @@ rm /etc/cron.daily/updateApplications.sh
 removepkg &name;-&version;-x86_64-1
 rm -rf &plugdir;
 rm -rf /boot/config/plugins/&name;
+/usr/local/sbin/update_cron
 </INLINE>
 </FILE> 
 </PLUGIN>
