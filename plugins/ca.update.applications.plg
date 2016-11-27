@@ -92,7 +92,7 @@ The 'remove' script.
 -->
 <FILE Run="/bin/bash" Method="remove">
 <INLINE>
-rm /etc/cron.daily/updateApplications.sh
+rm /etc/cron.daily/updateApplications.sh >/dev/null 2>&1
 removepkg &name;-&version;-x86_64-1
 rm -rf &plugdir;
 rm -rf /boot/config/plugins/&name;
