@@ -5,7 +5,7 @@
 # Community Applications copyright 2015-2016, Andrew Zawadzki #
 #                                                             #
 ###############################################################
-
+$docroot = $docroot ?: @$_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 require_once("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerClient.php");
 
 function logger($string) {
