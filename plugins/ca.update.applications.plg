@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2016.11.28a">
-<!ENTITY md5       "a1497037d66977201c057955770173a1">
+<!ENTITY version   "2016.11.28b">
+<!ENTITY md5       "32285885042d963ab0eb3f80c7244469">
 <!ENTITY launch    "Settings/AutoUpdate">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -30,7 +30,7 @@
 <?
   $version = parse_ini_file("/etc/unraid-version");
   
-  if ( version_compare($version['version'],"6.3.0-RC2", "<") )
+  if ( version_compare($version['version'],"6.2.0", "<") )
   {
     echo "*********************************************************************************************\n";
     echo "\n";
