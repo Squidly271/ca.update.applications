@@ -6,13 +6,10 @@
 #                                                             #
 ###############################################################
 $docroot = $docroot ?: @$_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+$_SERVER['DOCUMENT_ROOT'] = "/usr/local/emhttp";
+
 require_once("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerClient.php");
-  $version = parse_ini_file("/etc/unraid-version");
-  
-  if ( version_compare($version['version'],"6.3.0-RC4", "<") ) {
-    logger("Not functional on 6.2.x");
-    exit;
-  }
+
 function logger($string) {
   $string = escapeshellarg($string);
   shell_exec("logger -t 'Docker Auto Update' $string");

@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2016.11.28b">
-<!ENTITY md5       "32285885042d963ab0eb3f80c7244469">
+<!ENTITY version   "2016.11.30">
+<!ENTITY md5       "a3c259965c9e501060d703fbc792c34c">
 <!ENTITY launch    "Settings/AutoUpdate">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2016.11.30
+- Fix 6.2.4 Compatibility
+
 ###2016.11.25
 - Added Docker App autoupdates
 - Added Selectable run times for Plugin and Docker updates
