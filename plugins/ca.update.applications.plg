@@ -4,7 +4,7 @@
 <!ENTITY author    "Andrew Zawadzki">
 <!ENTITY version   "2016.12.18">
 <!ENTITY md5       "41f2e7da79f1f0c1753d1241ee0f2941">
-<!ENTITY launch    "Settings/AutoUpdate">
+<!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/master/plugins/&name;.plg">
