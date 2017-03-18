@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2016.12.18">
-<!ENTITY md5       "41f2e7da79f1f0c1753d1241ee0f2941">
+<!ENTITY version   "2017.03.18">
+<!ENTITY md5       "86b4f57ffaa1ee7c68e1f9ccfaa0cad1">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,12 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2017.03.18
+- Added in ability to run custom stop / start scripts for docker updates.  See CA manual for details
+
+###2017.02.19
+- Fixed uninstall routine
+
 ###2016.12.18
 - Force tabbed mode display
 
@@ -83,6 +89,8 @@ The 'post-install' script
 <INLINE>
 mv /boot/config/plugins/community.applications/AutoUpdateSettings.json /boot/config/plugins/ca.update.applications/AutoUpdateSettings.json > /dev/null 2> /dev/null
 /usr/local/sbin/update_cron
+mkdir -p /boot/config/plugins/ca.update.applications/scripts/stopping
+mkdir -p /boot/config/plugins/ca.update.applications/scripts/starting
 echo ""
 echo "----------------------------------------------------"
 echo " &name; has been installed."
