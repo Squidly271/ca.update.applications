@@ -39,6 +39,8 @@ $info = $DockerTemplates->getAllInfo();
 $allContainers = array_keys($info);
 
 $updateAll = $settings['global']['dockerUpdateAll'] == "yes";
+$dockerStopDelay = $settings['global']['dockerStopDelay'];
+$dockerStopDelay = $dockerStopDelay ? $dockerStopDelay : 10;
 
 foreach($allContainers as $container) {
   if ( ! $info[$container]['updated'] || $info[$container]['updated'] == "false" ) {
@@ -63,7 +65,9 @@ foreach ($updateList as $containerScript) {
     logger("Executing custom stop script /boot/config/plugins/ca.update.applications/scripts/stopping/$containerScript");
     exec("/boot/config/plugins/ca.update.applications/scripts/stopping/$containerScript");
   }
+  exec("docker stop -t $dockerStopDelay $containerScript");
 }
+
 logger("Installing Updates for ".implode(" ",$updateList));
 $_GET['updateContainer'] = true;
 $_GET['ct'] = $updateList;

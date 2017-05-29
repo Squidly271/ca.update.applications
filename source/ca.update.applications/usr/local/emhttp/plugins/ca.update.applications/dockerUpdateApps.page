@@ -98,6 +98,7 @@ $(function() {
 
   $("#dockerNotify").val("<?=$dockerUpdateSettings['global']['dockerNotify']?>");
   $("#dockerUpdateAll").val("<?=$dockerUpdateSettings['global']['dockerUpdateAll']?>");
+  $("#dockerStopDelay").val("<?=$dockerUpdateSettings['global']['dockerStopDelay']?>");
   
   if ( "<?=$dockerUpdateSettings['global']['dockerUpdateAll']?>" == "yes" ) {
     $("#dockerApps").hide();
@@ -128,8 +129,6 @@ function dockerApply() {
     dockerSettings.push(newSetting);
   });
   var dockerCron = getCronSettings("docker");
-  var dockerNotify = $("#dockerNotify").val();
-  var dockerUpdateAll = $("#dockerUpdateAll").val();
   $.post(URL,{action:'dockerApply',dockerSettings:dockerSettings,autoUpdate:autoUpdate,dockerCron:dockerCron},function(data) {
     if (data) {
       $("#testing").html(data);
@@ -161,6 +160,9 @@ function toggleAll() {
     <option value='yes'>Yes</option>
     <option value='no'>No</option>
     </select></td>
+</tr>
+  <td><b>Seconds to wait for stop before killing:</b></td>
+  <td><input type='number' class='narrow dockerSettings' placeholder='10' id='dockerStopDelay' onchange=$('#dockerApply').prop('disabled',false);></td>
 </tr>
 <tr>
   <td><b>Update All Docker Applications</b></td>
