@@ -39,8 +39,6 @@ $info = $DockerTemplates->getAllInfo();
 $allContainers = array_keys($info);
 
 $updateAll = $settings['global']['dockerUpdateAll'] == "yes";
-$dockerStopDelay = $settings['global']['dockerStopDelay'];
-$dockerStopDelay = $dockerStopDelay ? $dockerStopDelay : 10;
 
 foreach($allContainers as $container) {
   if ( ! $info[$container]['updated'] || $info[$container]['updated'] == "false" ) {
@@ -65,14 +63,26 @@ foreach ($updateList as $containerScript) {
     logger("Executing custom stop script /boot/config/plugins/ca.update.applications/scripts/stopping/$containerScript");
     exec("/boot/config/plugins/ca.update.applications/scripts/stopping/$containerScript");
   }
-  exec("docker stop -t $dockerStopDelay $containerScript");
 }
+$delayTime = $settings['global']['dockerStopDelay'];
+$delayTime = $delayTime ? $delayTime : 10;
 
+foreach ($updateList as $container) {
+  if ( $info[$container]['running'] ) {
+    logger("Stopping $container");
+    exec("docker stop -t $delayTime $container");
+  }
+}
 logger("Installing Updates for ".implode(" ",$updateList));
 $_GET['updateContainer'] = true;
 $_GET['ct'] = $updateList;
 include("/usr/local/emhttp/plugins/dynamix.docker.manager/include/CreateDocker.php");
+
 foreach ($updateList as $containerScript) {
+  if ($info[$containerScript]['running']) {
+    logger("Restarting $containerScript");
+    exec("docker start $containerScript");
+  }
   if ( is_file("/boot/config/plugins/ca.update.applications/scripts/starting/$containerScript") ) {
     logger("Executing custom start script /boot/config/plugins/ca.update.applications/scripts/starting/$containerScript");
     exec("/boot/config/plugins/ca.update.applications/scripts/starting/$containerScript");

@@ -129,6 +129,8 @@ function dockerApply() {
     dockerSettings.push(newSetting);
   });
   var dockerCron = getCronSettings("docker");
+  var dockerNotify = $("#dockerNotify").val();
+  var dockerUpdateAll = $("#dockerUpdateAll").val();
   $.post(URL,{action:'dockerApply',dockerSettings:dockerSettings,autoUpdate:autoUpdate,dockerCron:dockerCron},function(data) {
     if (data) {
       $("#testing").html(data);
@@ -161,8 +163,9 @@ function toggleAll() {
     <option value='no'>No</option>
     </select></td>
 </tr>
-  <td><b>Seconds to wait for stop before killing:</b></td>
-  <td><input type='number' class='narrow dockerSettings' placeholder='10' id='dockerStopDelay' onchange=$('#dockerApply').prop('disabled',false);></td>
+<tr>
+  <td><b>Time to wait for docker graceful stop before killing:</b></td>
+  <td><input type='number' placeholder='10' class='narrow dockerSettings' id='dockerStopDelay' onchange=$('#dockerApply').prop('disabled',false);></td>
 </tr>
 <tr>
   <td><b>Update All Docker Applications</b></td>
