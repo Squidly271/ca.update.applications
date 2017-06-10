@@ -296,7 +296,7 @@ function changeApply() {
   <option value='no'>No</option>
 </select></td>
 <tr><td><strong>Delay in days before updating applications:</strong></td>
-<td><input type='number' id='delay' style='width:20px' oninput='changeApply();'></td>
+<td><input type='number' id='delay' class='narrow' oninput='changeApply();'></td>
 <tr><td><strong>Auto Update All Plugins?</strong></td>
 <td><select id='allPlugins' size='1' onchange='changeGlobal();'>
   <option value='no'>No</option>

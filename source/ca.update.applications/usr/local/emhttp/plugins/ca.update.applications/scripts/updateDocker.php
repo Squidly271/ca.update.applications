@@ -70,6 +70,7 @@ $delayTime = $delayTime ? $delayTime : 10;
 foreach ($updateList as $container) {
   if ( $info[$container]['running'] ) {
     logger("Stopping $container");
+    logger("docker stop -t $delayTime $container");
     exec("docker stop -t $delayTime $container");
   }
 }
