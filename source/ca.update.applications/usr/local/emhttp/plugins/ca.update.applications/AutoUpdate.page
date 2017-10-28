@@ -13,6 +13,9 @@ require_once("/usr/local/emhttp/plugins/ca.update.applications/include/caCredits
 
 $plugin = "ca.update.applications";
 
+$unRaidVersion = parse_ini_file("/etc/unraid-version");
+$backTopTopIncluded = (version_compare($unRaidVersion['version'],"6.4.0-rc9f","<=")) ? "false" : "true";
+
 $installedVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /var/log/plugins/$plugin.plg");
 if ( is_file("/tmp/plugins/$plugin.plg") ) {
   $upgradeVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /tmp/plugins/$plugin.plg");
@@ -103,6 +106,7 @@ if ( is_array($updateSettings['cron']) ) {
 ?>
 <link type="text/css" rel="stylesheet" href="/plugins/ca.update.applications/styles/switchbutton.css">
 <style>
+<?if ($backTopTopIncluded == "false"):?>
 .back-to-top {
   background: none;
   margin: 0;
@@ -116,13 +120,14 @@ if ( is_array($updateSettings['cron']) ) {
   text-decoration: none;
   color: #ffffff;
 }
+<?endif;?>
 .unRaidAutoButton {
   left: 11px;
 }
 </style>
 
 <script>
-
+<?if ($backTopTopIncluded == "false"):?>
 jQuery(document).ready(function() {
   var offset = 250;
   var duration = 500;
@@ -140,6 +145,7 @@ jQuery(document).ready(function() {
     return false;
   })
 });
+<?endif;?>
 
 function toggleAutoStart(el) {
   $(el).find("div").toggleClass("unRaidAutoButton");
@@ -344,8 +350,10 @@ function changeApply() {
 <table></table>
 <input type='button' value='Apply' class='applyButton' disabled onclick='apply();'><input type='button' value=' Done ' onclick="location.href='../Settings'">
 <span id='settings'></span>
+<?if ($backTopTopIncluded == "false"):?>
 <a href="#" class="back-to-top" style="display: inline;">
 <img src='/plugins/community.applications/images/up.png' style='width:50px;height:50px' href="#" class="back-to-top"></img>
+<?endif;?>
 </a></div>
 <div>
 
