@@ -1,6 +1,6 @@
 Menu="Utilities"
 Type="xmenu"
-Title="Auto Update Settings"
+Title="Auto Update Applications"
 Icon="ca.update.applications.png"
 Tabs="true"
 
