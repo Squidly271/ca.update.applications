@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2017.10.28">
-<!ENTITY md5       "6009883872669a20db037e42080e313b">
+<!ENTITY version   "2017.11.23">
+<!ENTITY md5       "9200b0ef3b038e5e8f9c47f7d7faa18d">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,8 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2017.11.23
+- Reorganization as part of updates to CA proper
 ###2017.10.28
 - Prevent back to top displaying on 6.4.0-rc10b+
 
@@ -98,6 +100,8 @@ mv /boot/config/plugins/community.applications/AutoUpdateSettings.json /boot/con
 /usr/local/sbin/update_cron
 mkdir -p /boot/config/plugins/ca.update.applications/scripts/stopping
 mkdir -p /boot/config/plugins/ca.update.applications/scripts/starting
+rm -rf /usr/local/emhttp/plugins/ca.update.applications/CA.page
+rm -rf /usr/local/emhttp/plugins/ca.update.applications/caHelp.page
 echo ""
 echo "----------------------------------------------------"
 echo " &name; has been installed."

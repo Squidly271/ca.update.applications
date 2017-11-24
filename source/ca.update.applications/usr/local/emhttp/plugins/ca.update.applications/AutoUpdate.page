@@ -4,7 +4,7 @@ Title="Plugin Auto Update Settings"
 <?
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2016, Andrew Zawadzki #
+# Community Applications copyright 2015-2017, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 
@@ -289,7 +289,9 @@ function changeApply() {
 </script>
 <FORM method="get" id="myForm">
 
-> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a> or read the <a href="Settings/caHelp" target='_blank'>CA Manual</a></center>
+> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
+> <br>
+> <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
 <div id='upgradeAvailable' style='display:none'><center> <font color='red'>An update to CA Auto Update Applications is Available. Click <a href='/Plugins'>HERE</a> to install the update</center></font><br><br></div>
 
@@ -355,16 +357,10 @@ function changeApply() {
 <img src='/plugins/community.applications/images/up.png' style='width:50px;height:50px' href="#" class="back-to-top"></img>
 <?endif;?>
 </a></div>
-<div>
 
-<table><tr><td></td></tr><tr><td></td></tr></table>
-
-</div>
-<a href="Settings/caHelp" target='_blank'>CA Manual</a><a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
-<center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a></center>
+<a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
+<center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
 <center>Plugin Version: <strong><?=$installedVersion?></strong></center>
-
-> <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
 <span id='testing'></span>
 </FORM>

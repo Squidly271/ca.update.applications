@@ -150,7 +150,9 @@ function toggleAll() {
 
 
 </script>
-> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a> or read the <a href="Settings/caHelp" target='_blank'>CA Manual</a></center>
+> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
+> <br>
+> <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
 <div id='testing'></div>
 <div>
@@ -212,13 +214,7 @@ function toggleAll() {
 </div>
 <table></table>
 <input type='button' id='dockerApply' value='Apply' onclick='dockerApply();' disabled><input type='button' value='Done' onclick='done();'>
-<div>
 
-<table><tr><td></td></tr><tr><td></td></tr></table>
-
-</div>
-<a href="Settings/caHelp" target='_blank'>CA Manual</a><a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
-<center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">http://lime-technology.com/forum/index.php?topic=53693.0</a></center>
+<a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
+<center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
 <center>Plugin Version: <strong><?=$installedVersion?></strong></center>
-
-> <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
