@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2017.11.23">
-<!ENTITY md5       "121a08789e967a28d99f26bfd2933321">
+<!ENTITY version   "2018.03.02">
+<!ENTITY md5       "782dc8d0665f151e76d1d3a28cb3ff1b">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2018.03.02
+- Fixed: PHP Warnings (hidden) being issued on 6.5.0+
+
 ###2017.11.23
 - Reorganization as part of updates to CA proper
 ###2017.10.28

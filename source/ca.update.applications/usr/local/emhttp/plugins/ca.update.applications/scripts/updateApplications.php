@@ -49,7 +49,7 @@ if ( ! isset($appList['delay']) ) {
 $pluginsInstalled = array("ca.update.applications.plg") + array_diff(scandir("/var/log/plugins"),array(".","..","ca.update.applications.plg"));
 logger("Checking for available plugin updates");
 exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin checkall");
-$currentDate = date_create(now);
+$currentDate = date_create("now");
 foreach ($pluginsInstalled  as $plugin) {
   if ( is_file($communityPaths['autoUpdateKillSwitch']) ) {
     logger("Auto Update Kill Switch Activated.  Most likely details why on the forums");
