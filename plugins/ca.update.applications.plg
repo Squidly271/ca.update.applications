@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2018.10.19">
-<!ENTITY md5       "c670a64c7b95075297a088befa729cbb">
+<!ENTITY version   "2018.11.11">
+<!ENTITY md5       "2b19643e76a7cc55389ac1bbe47581cd">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2018.11.11
+- autov function
+
 ###2018.10.19
 - Fix Broken Pipe
 
