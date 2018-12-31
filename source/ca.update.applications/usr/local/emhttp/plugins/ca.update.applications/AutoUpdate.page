@@ -57,8 +57,8 @@ foreach ($pluginsFolder as $pluginFile) {
       $selected = "";
     }
     $displayOptions .= "<tr>";
-    $displayOptions .= "<td><img src='/".icon(plugin("name","/var/log/plugins/$pluginFile"))."' width='48px'></td>";
-    $displayOptions .= "<td>".Markdown(@file_get_contents("/usr/local/emhttp/plugins/".plugin("name","/var/log/plugins/$pluginFile")."/README.md"))."</td><td>";
+    $displayOptions .= "<td><img src='/".@icon(plugin("name","/var/log/plugins/$pluginFile"))."' width='48px'></td>";
+    $displayOptions .= "<td>".Markdown(@file_get_contents("/usr/local/emhttp/plugins/".@plugin("name","/var/log/plugins/$pluginFile")."/README.md"))."</td><td>";
     $displayOptions .= "<div class='ca-switch-button-background autoUpdatePlugin' style='width:25px; height:11px;'onclick='toggleAutoStart(this);'>";
     $class = $updateSettings[$pluginFile] ? "unRaidAutoButton" : null;
     $displayOptions .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-plugin='$pluginFile'>";
