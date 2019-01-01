@@ -1,7 +1,7 @@
 Menu="Utilities"
 Type="xmenu"
 Title="Auto Update Applications"
-Icon="refresh fa-spin"
+Icon="refresh"
 Tag="refresh"
 Tabs="true"
 
