@@ -18,12 +18,12 @@ $backTopTopIncluded = (version_compare($unRaidVersion['version'],"6.4.0-rc9f","<
 
 $installedVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /var/log/plugins/$plugin.plg");
 if ( is_file("/tmp/plugins/$plugin.plg") ) {
-  $upgradeVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /tmp/plugins/$plugin.plg");
+	$upgradeVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /tmp/plugins/$plugin.plg");
 } else {
-  $upgradeVersion = "0";
+	$upgradeVersion = "0";
 }
 if ( $installedVersion < $upgradeVersion ) {
-  $upgradeAvailable = "true";
+	$upgradeAvailable = "true";
 }
 
 $pluginsFolder = scandir("/var/log/plugins");
@@ -32,259 +32,265 @@ $pluginsFolder = scandir("/var/log/plugins");
 
 $updateSettings = json_decode(@file_get_contents("/boot/config/plugins/$plugin/AutoUpdateSettings.json"),true);
 if ( ! $updateSettings ) {
-  $updateSettings['community.applications.plg'] = "true";
-  $updateSettings['fix.common.problems.plg'] = "true";
-  $updateSettings['ca.update.applications.plg'] = "true";
-  $updateSettings['pluginCronFrequency'] = "Daily";
+	$updateSettings['community.applications.plg'] = "true";
+	$updateSettings['fix.common.problems.plg'] = "true";
+	$updateSettings['ca.update.applications.plg'] = "true";
+	$updateSettings['pluginCronFrequency'] = "Daily";
 }
 if ( ! $updateSettings['notify'] ) { $updateSettings['notify'] = "yes"; }
 if ( ! isset($updateSettings['delay']) ) { $updateSettings['delay'] = "3"; }
 if ( ! $updateSettings['pluginCronFrequency'] ) { $updateSettings['pluginCronFrequency'] = "Daily"; }
 if ( $updateSettings['Global'] == "true" ) {
-  $globalUpdate = "selected";
+	$globalUpdate = "selected";
 } 
 
 $displayOptions = "<table class='tablesorter'><thead><th>&nbsp;</th><th></th><th></th><th></th></thead><tbody>";
 foreach ($pluginsFolder as $pluginFile) {
-  if ( ( ! is_file("/boot/config/plugins/$pluginFile") ) && ( $pluginFile != "dynamix.plg" ) ) {
-    continue;
-  }
+	if ( ( ! is_file("/boot/config/plugins/$pluginFile") ) && ( $pluginFile != "dynamix.plg" ) ) {
+		continue;
+	}
 
-  if ( pathinfo($pluginFile, PATHINFO_EXTENSION) == "plg" ) {
-    if ( $updateSettings[$pluginFile] ) {
-      $selected = "selected";
-    } else {
-      $selected = "";
-    }
-    $displayOptions .= "<tr>";
-    $displayOptions .= "<td><img src='/".@icon(plugin("name","/var/log/plugins/$pluginFile"))."' width='48px'></td>";
-    $displayOptions .= "<td>".Markdown(@file_get_contents("/usr/local/emhttp/plugins/".@plugin("name","/var/log/plugins/$pluginFile")."/README.md"))."</td><td>";
-    $displayOptions .= "<div class='ca-switch-button-background autoUpdatePlugin' style='width:25px; height:11px;'onclick='toggleAutoStart(this);'>";
-    $class = $updateSettings[$pluginFile] ? "unRaidAutoButton" : null;
-    $displayOptions .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-plugin='$pluginFile'>";
-    $displayOptions .= "</div></div>";
-    $displayOptions .= $class ? "<span><center><font color='red'>Autoupdate ON</font></center></span>" : "<span><center>Autoupdate OFF</center></span>";
-    $displayOptions .= "</td></tr>";
-  }
+	if ( pathinfo($pluginFile, PATHINFO_EXTENSION) == "plg" ) {
+		if ( $updateSettings[$pluginFile] ) {
+			$selected = "selected";
+		} else {
+			$selected = "";
+		}
+		$displayOptions .= "<tr>";
+		$faIcon = plugin("icon","/var/log/plugins/$pluginFile");
+		if ( $faIcon ) {
+			$faClass = substr($faIcon,0,5) == "icon-" ? $faIcon : "fa fa-$faIcon";
+			$displayOptions .= "<td><i class='$faClass' style='font-size:4rem;'></i></td>";
+		} else {
+		  $displayOptions .= "<td><img src='/".@icon(plugin("name","/var/log/plugins/$pluginFile"))."' width='48px'></td>";
+		}
+		$displayOptions .= "<td>".Markdown(@file_get_contents("/usr/local/emhttp/plugins/".@plugin("name","/var/log/plugins/$pluginFile")."/README.md"))."</td><td>";
+		$displayOptions .= "<div class='ca-switch-button-background autoUpdatePlugin' style='width:25px; height:11px;'onclick='toggleAutoStart(this);'>";
+		$class = $updateSettings[$pluginFile] ? "unRaidAutoButton" : null;
+		$displayOptions .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-plugin='$pluginFile'>";
+		$displayOptions .= "</div></div>";
+		$displayOptions .= $class ? "<span><center><font color='red'>Autoupdate ON</font></center></span>" : "<span><center>Autoupdate OFF</center></span>";
+		$displayOptions .= "</td></tr>";
+	}
 }
 $displayOptions .= "</tbody></table>";
 $daysArray = array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
 $days = array_keys($daysArray);
 $dayCounter = 0;
 foreach ($daysArray as $day) {
-  $pluginDayScript .= "<option value='$dayCounter'>$day</option>";
-  ++$dayCounter;
+	$pluginDayScript .= "<option value='$dayCounter'>$day</option>";
+	++$dayCounter;
 }
 $dayOfMonthCounter = 1;
 for ($i = 1; $i < 32; $i++) {
-  $pluginDayOfMonth .= "<option value='$i'>$i</option>";
+	$pluginDayOfMonth .= "<option value='$i'>$i</option>";
 }
 for ($i = 0; $i <24; $i++) {
-  $human = $i;
-  if ( $i > 12 ) {
-    $human = $i - 12;
-  }
-  if ( $i == 0 ) {
-    $human = 12;
-  }
-  if ( $i > 11 ) {
-    $human .= " PM";
-  } else {
-    $human .= " AM";
-  }
-  $pluginCronHour .= "<option value='$i'>$human</option>";
+	$human = $i;
+	if ( $i > 12 ) {
+		$human = $i - 12;
+	}
+	if ( $i == 0 ) {
+		$human = 12;
+	}
+	if ( $i > 11 ) {
+		$human .= " PM";
+	} else {
+		$human .= " AM";
+	}
+	$pluginCronHour .= "<option value='$i'>$human</option>";
 }
 for ($i = 0; $i<60; $i++) {
-  $pluginMinute .= "<option value='$i'>$i</option>";
+	$pluginMinute .= "<option value='$i'>$i</option>";
 }
 if ( is_array($updateSettings['cron']) ) {
-  $cronSettings = array_keys($updateSettings['cron']);
-  foreach ($cronSettings as $setting) {
-    $pluginCronScript .= "$('#$setting').val('".$updateSettings['cron'][$setting]."');";
-  }
+	$cronSettings = array_keys($updateSettings['cron']);
+	foreach ($cronSettings as $setting) {
+		$pluginCronScript .= "$('#$setting').val('".$updateSettings['cron'][$setting]."');";
+	}
 }
 ?>
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/ca.update.applications/styles/switchbutton.css")?>">
 <style>
 <?if ($backTopTopIncluded == "false"):?>
 .back-to-top {
-  background: none;
-  margin: 0;
-  position: fixed;
-  bottom: 50px;
-  right: 0;
-  width: 70px;
-  height: 70px;
-  z-index: 100;
-  display: none;
-  text-decoration: none;
-  color: #ffffff;
+	background: none;
+	margin: 0;
+	position: fixed;
+	bottom: 50px;
+	right: 0;
+	width: 70px;
+	height: 70px;
+	z-index: 100;
+	display: none;
+	text-decoration: none;
+	color: #ffffff;
 }
 <?endif;?>
 .unRaidAutoButton {
-  left: 11px;
+	left: 11px;
 }
 </style>
 
 <script>
 <?if ($backTopTopIncluded == "false"):?>
 jQuery(document).ready(function() {
-  var offset = 250;
-  var duration = 500;
-  jQuery(window).scroll(function() {
-    if (jQuery(this).scrollTop() > offset) {
-      jQuery('.back-to-top').fadeIn(duration);
-    } else {
-      jQuery('.back-to-top').fadeOut(duration);
-    }
-  });
-  
-  jQuery('.back-to-top').click(function(event) {
-    event.preventDefault();
-    jQuery('html, body').animate({scrollTop: 0}, duration);
-    return false;
-  })
+	var offset = 250;
+	var duration = 500;
+	jQuery(window).scroll(function() {
+		if (jQuery(this).scrollTop() > offset) {
+			jQuery('.back-to-top').fadeIn(duration);
+		} else {
+			jQuery('.back-to-top').fadeOut(duration);
+		}
+	});
+	
+	jQuery('.back-to-top').click(function(event) {
+		event.preventDefault();
+		jQuery('html, body').animate({scrollTop: 0}, duration);
+		return false;
+	})
 });
 <?endif;?>
 
 function toggleAutoStart(el) {
-  $(el).find("div").toggleClass("unRaidAutoButton");
-  if ( $(el).find("div").hasClass("unRaidAutoButton") ) {
-    $(el).parent().find("span").html("<center><font color='red'>Autoupdate ON</font><center>");
-  } else {
-    $(el).parent().find("span").html("<center>Autoupdate OFF</center>");
-  }
-  changeApply();
+	$(el).find("div").toggleClass("unRaidAutoButton");
+	if ( $(el).find("div").hasClass("unRaidAutoButton") ) {
+		$(el).parent().find("span").html("<center><font color='red'>Autoupdate ON</font><center>");
+	} else {
+		$(el).parent().find("span").html("<center>Autoupdate OFF</center>");
+	}
+	changeApply();
 }
 
 
 var URL = "/plugins/<?=$plugin?>/include/exec.php";
 
 $(function() {
-  $(".pluginCron").change(function() {
-    validateCron("plugin");
-    changeApply();
-  });
-  
-  
-  if ( "<?=$upgradeAvailable?>" == "true" ) {
-    $("#upgradeAvailable").show();
-  }
-  changeGlobal();
-  $("#notify").val('<?=$updateSettings['notify']?>');
-  $("#delay").val('<?=$updateSettings['delay']?>');
-  $("#pluginCronFrequency").val('<?=$updateSettings['pluginCronFrequency']?>');
-  <?=$pluginCronScript?>
-  validateCron("plugin");
+	$(".pluginCron").change(function() {
+		validateCron("plugin");
+		changeApply();
+	});
+	
+	
+	if ( "<?=$upgradeAvailable?>" == "true" ) {
+		$("#upgradeAvailable").show();
+	}
+	changeGlobal();
+	$("#notify").val('<?=$updateSettings['notify']?>');
+	$("#delay").val('<?=$updateSettings['delay']?>');
+	$("#pluginCronFrequency").val('<?=$updateSettings['pluginCronFrequency']?>');
+	<?=$pluginCronScript?>
+	validateCron("plugin");
 });
 
 function validateCron(pagetype) {
-  var baseID = "#"+pagetype;
-  var frequency = $(baseID+"CronFrequency").val();
-  switch ( frequency ) {
-    case "disabled":
-      $(baseID+"CronDay").prop("disabled",true);
-      $(baseID+"CronDayOfMonth").prop("disabled",true);
-      $(baseID+"CronHour").prop("disabled",true);
-      $(baseID+"CronMinute").prop("disabled",true);
-      $(baseID+"CronCustom").prop("disabled",true);
-      break;
-    case "Daily":
-      $(baseID+"CronDay").prop("disabled",true);
-      $(baseID+"CronDayOfMonth").prop("disabled",true);
-      $(baseID+"CronHour").prop("disabled",false);
-      $(baseID+"CronMinute").prop("disabled",false);
-      $(baseID+"CronCustom").prop("disabled",true);
-      break;
-    case "Weekly":
-      $(baseID+"CronDay").prop("disabled",false);
-      $(baseID+"CronDayOfMonth").prop("disabled",true);
-      $(baseID+"CronHour").prop("disabled",false);
-      $(baseID+"CronMinute").prop("disabled",false);
-      $(baseID+"CronCustom").prop("disabled",true);
-      break;
-    case "Monthly":
-      $(baseID+"CronDay").prop("disabled",true);
-      $(baseID+"CronDayOfMonth").prop("disabled",false);
-      $(baseID+"CronHour").prop("disabled",false);
-      $(baseID+"CronMinute").prop("disabled",false);
-      $(baseID+"CronCustom").prop("disabled",true);
-      break;
-    case "Custom":
-      $(baseID+"CronDay").prop("disabled",true);
-      $(baseID+"CronDayOfMonth").prop("disabled",true);
-      $(baseID+"CronHour").prop("disabled",true);
-      $(baseID+"CronMinute").prop("disabled",true);
-      $(baseID+"CronCustom").prop("disabled",false);
-      break;
-  }
+	var baseID = "#"+pagetype;
+	var frequency = $(baseID+"CronFrequency").val();
+	switch ( frequency ) {
+		case "disabled":
+			$(baseID+"CronDay").prop("disabled",true);
+			$(baseID+"CronDayOfMonth").prop("disabled",true);
+			$(baseID+"CronHour").prop("disabled",true);
+			$(baseID+"CronMinute").prop("disabled",true);
+			$(baseID+"CronCustom").prop("disabled",true);
+			break;
+		case "Daily":
+			$(baseID+"CronDay").prop("disabled",true);
+			$(baseID+"CronDayOfMonth").prop("disabled",true);
+			$(baseID+"CronHour").prop("disabled",false);
+			$(baseID+"CronMinute").prop("disabled",false);
+			$(baseID+"CronCustom").prop("disabled",true);
+			break;
+		case "Weekly":
+			$(baseID+"CronDay").prop("disabled",false);
+			$(baseID+"CronDayOfMonth").prop("disabled",true);
+			$(baseID+"CronHour").prop("disabled",false);
+			$(baseID+"CronMinute").prop("disabled",false);
+			$(baseID+"CronCustom").prop("disabled",true);
+			break;
+		case "Monthly":
+			$(baseID+"CronDay").prop("disabled",true);
+			$(baseID+"CronDayOfMonth").prop("disabled",false);
+			$(baseID+"CronHour").prop("disabled",false);
+			$(baseID+"CronMinute").prop("disabled",false);
+			$(baseID+"CronCustom").prop("disabled",true);
+			break;
+		case "Custom":
+			$(baseID+"CronDay").prop("disabled",true);
+			$(baseID+"CronDayOfMonth").prop("disabled",true);
+			$(baseID+"CronHour").prop("disabled",true);
+			$(baseID+"CronMinute").prop("disabled",true);
+			$(baseID+"CronCustom").prop("disabled",false);
+			break;
+	}
 }
 
 function showCredits() {
-  myAlert("CA Auto Update Plugins","<?=$caCredits?>","/plugins/<?=$plugin?>/images/ca.update.applications.png","96x96", true, false, true);
+	myAlert("CA Auto Update Plugins","<?=$caCredits?>","/plugins/<?=$plugin?>/images/ca.update.applications.png","96x96", true, false, true);
 }
 
 function myAlert(description,textdescription,textimage,imagesize, outsideClick, showCancel, showConfirm, alertType) {
-  if ( !outsideClick ) outsideClick = false;
-  if ( !showCancel )   showCancel = false;
-  if ( !showConfirm )  showConfirm = false;
-  if ( imagesize == "" ) { imagesize = "80x80"; }
-  swal({
-    title: description,
-    text: textdescription,
-    imageUrl: textimage,
-    imageSize: imagesize,
-    allowOutsideClick: outsideClick,
-    showConfirmButton: showConfirm,
-    showCancelButton: showCancel,
-    type: alertType,
-    html: true
-  });
+	if ( !outsideClick ) outsideClick = false;
+	if ( !showCancel )   showCancel = false;
+	if ( !showConfirm )  showConfirm = false;
+	if ( imagesize == "" ) { imagesize = "80x80"; }
+	swal({
+		title: description,
+		text: textdescription,
+		imageUrl: textimage,
+		imageSize: imagesize,
+		allowOutsideClick: outsideClick,
+		showConfirmButton: showConfirm,
+		showCancelButton: showCancel,
+		type: alertType,
+		html: true
+	});
 }
 
 function apply() {
-  var myvalue = new Array();
-  $('.unRaidAutoButton').each(function () {
-    var plugin = $(this).data("plugin");
-    var pluginSetting = new Array(plugin);
-    myvalue.push(pluginSetting);
-  });
-  var globalUpdate = $("#allPlugins").val();
-  var notify = $("#notify").val();
-  var delay = $("#delay").val();
-  var pluginCron = getCronSettings("plugin");
-  $.post(URL,{action:'autoUpdatePlugins',globalUpdate:globalUpdate,pluginList:myvalue,notify:notify,delay:delay,pluginCron:pluginCron},function(data) {
-    if (data) {
-      $("#testing").html(data);
-    }
-  });
-  $(".applyButton").prop("disabled",true);
+	var myvalue = new Array();
+	$('.unRaidAutoButton').each(function () {
+		var plugin = $(this).data("plugin");
+		var pluginSetting = new Array(plugin);
+		myvalue.push(pluginSetting);
+	});
+	var globalUpdate = $("#allPlugins").val();
+	var notify = $("#notify").val();
+	var delay = $("#delay").val();
+	var pluginCron = getCronSettings("plugin");
+	$.post(URL,{action:'autoUpdatePlugins',globalUpdate:globalUpdate,pluginList:myvalue,notify:notify,delay:delay,pluginCron:pluginCron},function(data) {
+		if (data) {
+			$("#testing").html(data);
+		}
+	});
+	$(".applyButton").prop("disabled",true);
 }
 
 function getCronSettings(pagetype) {
-  var cronSettings = new Array();
-  $("."+pagetype+"Cron").each(function() {
-    var settingID = $(this).attr("id");
-    var settingVal = $(this).val();
-    var settings = new Array(settingID,settingVal);
-    cronSettings.push(settings);
-  });
-  return cronSettings;
+	var cronSettings = new Array();
+	$("."+pagetype+"Cron").each(function() {
+		var settingID = $(this).attr("id");
+		var settingVal = $(this).val();
+		var settings = new Array(settingID,settingVal);
+		cronSettings.push(settings);
+	});
+	return cronSettings;
 }
 
 function changeGlobal() {
-  var selectedValue = $('#allPlugins').val();
-  
-  if (selectedValue == "no" ) {
-    $("#pluginList").show();
-  } else {
-    $("#pluginList").hide();
-  }
-  changeApply();
+	var selectedValue = $('#allPlugins').val();
+	
+	if (selectedValue == "no" ) {
+		$("#pluginList").show();
+	} else {
+		$("#pluginList").hide();
+	}
+	changeApply();
 }
 
 function changeApply() {
-  $(".applyButton").prop("disabled",false);
+	$(".applyButton").prop("disabled",false);
 }
 </script>
 <FORM method="get" id="myForm">
@@ -300,23 +306,23 @@ function changeApply() {
 <table>
 <tr><td><strong>Send Notifications On Update?</strong></td>
 <td><select id='notify' size='1' onchange='changeApply();'>
-  <option value='yes'>Yes</option>
-  <option value='no'>No</option>
+	<option value='yes'>Yes</option>
+	<option value='no'>No</option>
 </select></td>
 <tr><td><strong>Delay in days before updating applications:</strong></td>
 <td><input type='number' id='delay' class='narrow' oninput='changeApply();'></td>
 <tr><td><strong>Auto Update All Plugins?</strong></td>
 <td><select id='allPlugins' size='1' onchange='changeGlobal();'>
-  <option value='no'>No</option>
-  <option value='yes' <?=$globalUpdate?>>Yes</option>
+	<option value='no'>No</option>
+	<option value='yes' <?=$globalUpdate?>>Yes</option>
 </select></td>
 <tr><td><strong>Update Check Frequency:</strong></td>
 <td><select id='pluginCronFrequency' class='pluginCron'>
-  <option value='disabled'>Disabled</option>
-  <option value='Daily'>Daily</option>
-  <option value='Weekly'>Weekly</option>
-  <option value='Monthly'>Monthly</option>
-  <option value='Custom'>Custom</option>
+	<option value='disabled'>Disabled</option>
+	<option value='Daily'>Daily</option>
+	<option value='Weekly'>Weekly</option>
+	<option value='Monthly'>Monthly</option>
+	<option value='Custom'>Custom</option>
 </select></td></tr>
 </tr></table>
 </div>
