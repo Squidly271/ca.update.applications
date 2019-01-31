@@ -204,7 +204,7 @@ function toggleAll() {
 <td><select id='dockerCronMinute' class='dockerCron'>
 <?=$pluginMinute?>
 </select></td></tr>
-<tr><td><strong>Custom:</strong></td>
+<tr><td><strong>Custom (cron expression):</strong></td>
 <td><input type='text' id='dockerCronCustom' class='dockerCron'></td></tr>
 </table>
 </div></div>

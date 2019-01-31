@@ -345,7 +345,7 @@ function changeApply() {
 <td><select id='pluginCronMinute' class='pluginCron'>
 <?=$pluginMinute?>
 </select></td></tr>
-<tr><td><strong>Custom:</strong></td>
+<tr><td><strong>Custom (cron expression):</strong></td>
 <td><input type='text' id='pluginCronCustom' class='pluginCron'></td></tr>
 </table>
 </div></div>

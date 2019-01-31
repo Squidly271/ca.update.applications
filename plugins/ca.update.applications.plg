@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2019.01.14">
-<!ENTITY md5       "369c501f6b87d6d45d309adddefd83d3">
+<!ENTITY version   "2019.01.31">
+<!ENTITY md5       "2fa901900bb67998a07d27cac48eef79">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2019.01.31
+- Add note that custom is a cron expression
+
 ###2019.01.14
 - Support new style icons
 
