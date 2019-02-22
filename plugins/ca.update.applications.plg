@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2019.01.31">
-<!ENTITY md5       "2fa901900bb67998a07d27cac48eef79">
+<!ENTITY version   "2019.02.22">
+<!ENTITY md5       "c633a0c87b25e0e2aa1d92b25a74e0e2">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,10 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2019.02.22
+- Work around for unRaid believing an image is installed, but one isn't under certain circumstances
+- Fix up coloring in credits popup
+
 ###2019.01.31
 - Add note that custom is a cron expression
 
