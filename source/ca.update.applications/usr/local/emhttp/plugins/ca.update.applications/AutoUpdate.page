@@ -16,16 +16,6 @@ $plugin = "ca.update.applications";
 $unRaidVersion = parse_ini_file("/etc/unraid-version");
 $backTopTopIncluded = (version_compare($unRaidVersion['version'],"6.4.0-rc9f","<=")) ? "false" : "true";
 
-$installedVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /var/log/plugins/$plugin.plg");
-if ( is_file("/tmp/plugins/$plugin.plg") ) {
-	$upgradeVersion = exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin version /tmp/plugins/$plugin.plg");
-} else {
-	$upgradeVersion = "0";
-}
-if ( $installedVersion < $upgradeVersion ) {
-	$upgradeAvailable = "true";
-}
-
 $pluginsFolder = scandir("/var/log/plugins");
 
 # get the settings already selected
@@ -135,7 +125,12 @@ if ( is_array($updateSettings['cron']) ) {
 <script>
 $(function() {
   if ( typeof caPluginUpdateCheck === "function" ) {
-    caPluginUpdateCheck("ca.update.applications.plg",{name:"Auto Update Applications"});
+    caPluginUpdateCheck("ca.update.applications.plg",{name:"Auto Update Applications"},function(data) {
+			if (data) {
+				var result = JSON.parse(data);
+				$(".caUpdateVersion").html(result.installedVersion)
+			}
+		});
   }
 });
 
@@ -305,7 +300,6 @@ function changeApply() {
 > <br>
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
-<div id='upgradeAvailable' style='display:none'><center> <font color='red'>An update to CA Auto Update Applications is Available. Click <a href='/Plugins'>HERE</a> to install the update</center></font><br><br></div>
 
 <div>
 <div style='width:45%;float:left;'>
@@ -372,7 +366,7 @@ function changeApply() {
 
 <a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
 <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
-<center>Plugin Version: <strong><?=$installedVersion?></strong></center>
+<center>Plugin Version: <strong><span class='caUpdateVersion'></span></strong></center>
 
 <span id='testing'></span>
 </FORM>
