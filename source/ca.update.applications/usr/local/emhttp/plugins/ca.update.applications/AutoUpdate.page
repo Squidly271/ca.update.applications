@@ -133,6 +133,12 @@ if ( is_array($updateSettings['cron']) ) {
 </style>
 
 <script>
+$(function() {
+  if ( typeof caPluginUpdateCheck === "function" ) {
+    caPluginUpdateCheck("ca.update.applications.plg",{name:"Auto Update Applications"});
+  }
+});
+
 <?if ($backTopTopIncluded == "false"):?>
 jQuery(document).ready(function() {
 	var offset = 250;

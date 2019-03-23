@@ -35,7 +35,19 @@ if ( ! $settings ) {
   exit;
 }
 $DockerTemplates = new DockerTemplates();
+$DockerClient = new DockerClient();
+
 $info = $DockerTemplates->getAllInfo();
+# workaround for incorrect caching in dockerMan
+$containers = $DockerClient->getDockerContainers();
+foreach ($containers as $container) {
+	$info[$container['Name']]['running'] = $container['Running'];
+	$info[$container['Name']]['repository'] = $container['Image'];
+	$info[$container['Name']]['ImageId'] = $container['ImageId'];
+	$info[$container['Name']]['Id'] = $container['Id'];
+	$info[$container['Name']]['Name'] = $container['Name'];
+}
+
 $allContainers = array_keys($info);
 
 $updateAll = $settings['global']['dockerUpdateAll'] == "yes";
@@ -70,20 +82,19 @@ $delayTime = $delayTime ? $delayTime : 10;
 foreach ($updateList as $container) {
   if ( $info[$container]['running'] ) {
     logger("Stopping $container");
-    logger("docker stop -t $delayTime $container");
-    exec("docker stop -t $delayTime $container");
+		$DockerClient->stopContainer($info[$container]['Id']);
   }
 }
 logger("Installing Updates for ".implode(" ",$updateList));
 $_GET['updateContainer'] = true;
 $_GET['ct'] = $updateList;
 include("/usr/local/emhttp/plugins/dynamix.docker.manager/include/CreateDocker.php");
-
+$containers = $DockerClient->getDockerContainers();
 foreach ($updateList as $containerScript) {
   if ($info[$containerScript]['running']) {
     logger("Restarting $containerScript");
-    exec("docker start $containerScript");
-  }
+		$DockerClient->startContainer($containers[$containerScript]['Id']);
+	}
   if ( is_file("/boot/config/plugins/ca.update.applications/scripts/starting/$containerScript") ) {
     logger("Executing custom start script /boot/config/plugins/ca.update.applications/scripts/starting/$containerScript");
     exec("/boot/config/plugins/ca.update.applications/scripts/starting/$containerScript");
