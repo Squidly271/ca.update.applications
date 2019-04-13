@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2019.02.22">
-<!ENTITY md5       "c633a0c87b25e0e2aa1d92b25a74e0e2">
+<!ENTITY version   "2019.04.13">
+<!ENTITY md5       "8b6da2ff60123843f91ca5488dc6e945">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2019.04.13
+- Prevent extraneous notifications on unRaid 6.7.0-rc7+
+
 ###2019.02.22
 - Work around for unRaid believing an image is installed, but one isn't under certain circumstances
 - Fix up coloring in credits popup
