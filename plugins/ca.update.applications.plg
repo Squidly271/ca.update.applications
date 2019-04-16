@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2019.04.13">
-<!ENTITY md5       "8b6da2ff60123843f91ca5488dc6e945">
+<!ENTITY version   "2019.04.15">
+<!ENTITY md5       "1bb9559aeaa6f24910a709ef0643592d">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2019.04.15
+- Remove experimental code mistakenly added
+
 ###2019.04.13
 - Prevent extraneous notifications on unRaid 6.7.0-rc7+
 

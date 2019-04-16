@@ -82,7 +82,7 @@ $delayTime = $delayTime ? $delayTime : 10;
 foreach ($updateList as $container) {
   if ( $info[$container]['running'] ) {
     logger("Stopping $container");
-		$DockerClient->stopContainer($info[$container]['Id']);
+		exec("docker stop -t $delayTime $container");
   }
 }
 logger("Installing Updates for ".implode(" ",$updateList));
@@ -93,7 +93,7 @@ $containers = $DockerClient->getDockerContainers();
 foreach ($updateList as $containerScript) {
   if ($info[$containerScript]['running']) {
     logger("Restarting $containerScript");
-		$DockerClient->startContainer($containers[$containerScript]['Id']);
+		exec("docker start $containerScript");
 	}
   if ( is_file("/boot/config/plugins/ca.update.applications/scripts/starting/$containerScript") ) {
     logger("Executing custom start script /boot/config/plugins/ca.update.applications/scripts/starting/$containerScript");
