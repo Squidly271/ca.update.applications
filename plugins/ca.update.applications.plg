@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2019.04.15">
-<!ENTITY md5       "1bb9559aeaa6f24910a709ef0643592d">
+<!ENTITY version   "2019.09.09">
+<!ENTITY md5       "5fda7259f14d1521cbcdd4437d721e08">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2019.09.09
+- Patch docker client to properly detect updates available
+
 ###2019.04.15
 - Remove experimental code mistakenly added
 
@@ -103,6 +106,12 @@
     $cron = "# Generated cron settings for plugin autoupdates\n0 0 * * * /usr/local/emhttp/plugins/ca.update.applications/scripts/updateApplications.php >/dev/null 2>&1\n";
     file_put_contents("/boot/config/plugins/ca.update.applications/plugin_update.cron",$cron);
   }
+	if ( version_compare($version['version'],"6.7.9","<") ) {
+	  echo "Patching DockerClient\n";
+		$DockerClient = file_get_contents("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerClient.php");
+		$DockerClient = str_replace("Accept: application/vnd.docker.distribution.manifest.v2+json","Accept: application/vnd.docker.distribution.manifest.list.v2+json,application/vnd.docker.distribution.manifest.v2+json",$DockerClient);
+		file_put_contents("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerClient.php",$DockerClient);
+	}
 ?>
 ]]>
 </INLINE>
