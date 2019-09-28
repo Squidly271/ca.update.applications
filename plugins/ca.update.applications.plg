@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2019.09.09">
-<!ENTITY md5       "5fda7259f14d1521cbcdd4437d721e08">
+<!ENTITY version   "2019.09.28">
+<!ENTITY md5       "54a5b26c1bfde85edfcdfef3da96cec0">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2019.09.23
+- Remove backup of old plugins to lessen writes to flash drive
+	
 ###2019.09.09
 - Patch docker client to properly detect updates available
 

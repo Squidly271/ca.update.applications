@@ -77,8 +77,8 @@ foreach ($pluginsInstalled  as $plugin) {
       $age = $interval->format("$R%a");
       if ( ($age >= $appList['delay']) || ($appList['delay'] == 0) ) {
         logger("Auto Updating $plugin");
-        exec("mkdir -p /boot/config/plugins-old-versions/$plugin/$installedVersion");
-        copy("/var/log/plugins/$plugin","/boot/config/plugins-old-versions/$plugin/$installedVersion/$plugin");
+ //       exec("mkdir -p /boot/config/plugins-old-versions/$plugin/$installedVersion");
+ //       copy("/var/log/plugins/$plugin","/boot/config/plugins-old-versions/$plugin/$installedVersion/$plugin");
         unset($output);
         exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/plugin update '$plugin'",$output,$error);
         if ( ! $error ) {
