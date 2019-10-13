@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2019.09.28">
-<!ENTITY md5       "54a5b26c1bfde85edfcdfef3da96cec0">
+<!ENTITY version   "2019.10.13">
+<!ENTITY md5       "c1c7575d21f2460f0a00b4cc5a609bd9">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2019.10.13
+- Docker: Display default icon if no icon is present
+
 ###2019.09.23
 - Remove backup of old plugins to lessen writes to flash drive
 	

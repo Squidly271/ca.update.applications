@@ -45,8 +45,9 @@ if ( $dockerRunning == "true" ) {
     $class = $dockerUpdateSettings['containers'][$container]['update'] ? "unRaidDockerButton" : null;
     $index = searchArray($moreInfo,"Name",$container);
     $repository = ($index === false) ? "Unknown" : $moreInfo[$index]['Image'];
+		$icon = $info[$container]['icon'] ?: "/plugins/dynamix.docker.manager/images/question.png";
     $dockerSettings .= "<td width:25%;>";
-    $dockerSettings .= "<img src='".$info[$container]['icon']."' width=48px; height=48px;></td>";
+    $dockerSettings .= "<img src='$icon' width=48px; height=48px;></td>";
     $dockerSettings .= "<td><strong>$container</strong><br>$repository</td>";
     $dockerSettings .= "<td><div class='ca-switch-button-background autoUpdateDocker' style='width:25px; height:11px;'onclick='toggleDockerAutoStart(this);'>";
     $dockerSettings .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-docker='$container'>";
