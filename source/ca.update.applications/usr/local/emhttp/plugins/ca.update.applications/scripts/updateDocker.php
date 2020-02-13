@@ -68,12 +68,12 @@ if ( ! $updateList ) {
 
 if ( is_file("/boot/config/plugins/ca.update.applications/scripts/stopping/stop_all") ) {
   logger("Executing custom stop script /boot/config/plugins/ca.update.applications/scripts/stopping/stop_all");
-  exec("/boot/config/plugins/ca.update.applications/scripts/stopping/stop_all");
+  exec("/bin/bash /boot/config/plugins/ca.update.applications/scripts/stopping/stop_all");
 }
 foreach ($updateList as $containerScript) {
   if ( is_file("/boot/config/plugins/ca.update.applications/scripts/stopping/$containerScript") ) {
     logger("Executing custom stop script /boot/config/plugins/ca.update.applications/scripts/stopping/$containerScript");
-    exec("/boot/config/plugins/ca.update.applications/scripts/stopping/$containerScript");
+    exec("/bin/bash /boot/config/plugins/ca.update.applications/scripts/stopping/$containerScript");
   }
 }
 $delayTime = $settings['global']['dockerStopDelay'];
@@ -97,12 +97,12 @@ foreach ($updateList as $containerScript) {
 	}
   if ( is_file("/boot/config/plugins/ca.update.applications/scripts/starting/$containerScript") ) {
     logger("Executing custom start script /boot/config/plugins/ca.update.applications/scripts/starting/$containerScript");
-    exec("/boot/config/plugins/ca.update.applications/scripts/starting/$containerScript");
+    exec("/bin/bash /boot/config/plugins/ca.update.applications/scripts/starting/$containerScript");
   }
 }
 if ( is_file("/boot/config/plugins/ca.update.applications/scripts/starting/start_all") ) {
   logger("Executing custom start script /boot/config/plugins/ca.update.applications/scripts/starting/start_all");
-  exec("/boot/config/plugins/ca.update.applications/scripts/starting/start_all");
+  exec("/bin/bash /boot/config/plugins/ca.update.applications/scripts/starting/start_all");
 }
 
 if ( $settings['global']['dockerNotify'] == "yes" ) {
