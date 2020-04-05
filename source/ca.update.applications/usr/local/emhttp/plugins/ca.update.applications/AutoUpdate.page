@@ -8,6 +8,22 @@ Title="Plugin Auto Update Settings"
 #                                                             #
 ###############################################################
 
+$docroot = $docroot ?: $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+
+
+function tr($string,$ret=false) {
+	if ( function_exists("_") )
+		$string =  _($string);
+	if ( $ret )
+		return $string;
+	else
+		echo $string;
+}
+if ( ! function_exists("my_lang") ) {
+	function my_lang($string,$flag) {
+		return $string;
+	}
+}
 require_once("/usr/local/emhttp/plugins/dynamix.plugin.manager/include/PluginHelpers.php");
 require_once("/usr/local/emhttp/plugins/ca.update.applications/include/caCredits.php");
 
@@ -59,7 +75,7 @@ foreach ($pluginsFolder as $pluginFile) {
 		$class = $updateSettings[$pluginFile] ? "unRaidAutoButton" : null;
 		$displayOptions .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-plugin='$pluginFile'>";
 		$displayOptions .= "</div></div>";
-		$displayOptions .= $class ? "<span><center><font color='red'>Autoupdate ON</font></center></span>" : "<span><center>Autoupdate OFF</center></span>";
+		$displayOptions .= $class ? "<span><center><font color='red'>".tr("Autoupdate ON",true)."</font></center></span>" : "<span><center>".tr("Autoupdate OFF",true)."</center></span>";
 		$displayOptions .= "</td></tr>";
 	}
 }
@@ -68,7 +84,7 @@ $daysArray = array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","
 $days = array_keys($daysArray);
 $dayCounter = 0;
 foreach ($daysArray as $day) {
-	$pluginDayScript .= "<option value='$dayCounter'>$day</option>";
+	$pluginDayScript .= "<option value='$dayCounter'>".my_lang($day)."</option>";
 	++$dayCounter;
 }
 $dayOfMonthCounter = 1;
@@ -157,9 +173,9 @@ jQuery(document).ready(function() {
 function toggleAutoStart(el) {
 	$(el).find("div").toggleClass("unRaidAutoButton");
 	if ( $(el).find("div").hasClass("unRaidAutoButton") ) {
-		$(el).parent().find("span").html("<center><font color='red'>Autoupdate ON</font><center>");
+		$(el).parent().find("span").html("<center><font color='red'><?tr("Autoupdate ON");?></font><center>");
 	} else {
-		$(el).parent().find("span").html("<center>Autoupdate OFF</center>");
+		$(el).parent().find("span").html("<center><?tr("Autoupdate OFF");?></center>");
 	}
 	changeApply();
 }
@@ -296,7 +312,7 @@ function changeApply() {
 </script>
 <FORM method="get" id="myForm">
 
-> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
+> <center><a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank"><?tr("Support");?></a></center>
 > <br>
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
@@ -304,48 +320,48 @@ function changeApply() {
 <div>
 <div style='width:45%;float:left;'>
 <table>
-<tr><td><strong>Send Notifications On Update?</strong></td>
+<tr><td><strong><?tr("Send Notifications On Update?");?></strong></td>
 <td><select id='notify' size='1' onchange='changeApply();'>
-	<option value='yes'>Yes</option>
-	<option value='no'>No</option>
+	<option value='yes'><?tr("Yes");?></option>
+	<option value='no'><?tr("No");?></option>
 </select></td>
-<tr><td><strong>Delay in days before updating applications:</strong></td>
+<tr><td><strong><?tr("Delay in days before updating applications:");?></strong></td>
 <td><input type='number' id='delay' class='narrow' oninput='changeApply();'></td>
-<tr><td><strong>Auto Update All Plugins?</strong></td>
+<tr><td><strong><?tr("Auto Update All Plugins?");?></strong></td>
 <td><select id='allPlugins' size='1' onchange='changeGlobal();'>
-	<option value='no'>No</option>
-	<option value='yes' <?=$globalUpdate?>>Yes</option>
+	<option value='no'><?tr("No");?></option>
+	<option value='yes' <?=$globalUpdate?>><?tr("Yes");?></option>
 </select></td>
-<tr><td><strong>Update Check Frequency:</strong></td>
+<tr><td><strong><?tr("Update Check Frequency:");?></strong></td>
 <td><select id='pluginCronFrequency' class='pluginCron'>
-	<option value='disabled'>Disabled</option>
-	<option value='Daily'>Daily</option>
-	<option value='Weekly'>Weekly</option>
-	<option value='Monthly'>Monthly</option>
-	<option value='Custom'>Custom</option>
+	<option value='disabled'><?tr("Disabled");?></option>
+	<option value='Daily'><?tr("Daily");?></option>
+	<option value='Weekly'><?tr("Weekly");?></option>
+	<option value='Monthly'><?tr("Monthly");?></option>
+	<option value='Custom'><?tr("Custom");?></option>
 </select></td></tr>
 </tr></table>
 </div>
 <div style='width:45%;float:left;'>
 <table>
 
-<tr><td><strong>Day Of Week:</strong></td>
+<tr><td><strong><?tr("Day Of Week:");?></strong></td>
 <td><select id='pluginCronDay' class='pluginCron'>
 <?=$pluginDayScript?>
 </select></td></tr>
-<tr><td><strong>Day Of Month:</strong></td>
+<tr><td><strong><?tr("Day Of Month:");?></strong></td>
 <td><select id='pluginCronDayOfMonth' class='pluginCron'>
 <?=$pluginDayOfMonth?>
 </select></td></tr>
-<tr><td><strong>Hour:</strong></td>
+<tr><td><strong><?tr("Hour:");?></strong></td>
 <td><select id='pluginCronHour' class='pluginCron'>
 <?=$pluginCronHour?>
 </select></td></tr>
-<tr><td><strong>Minute:</strong></td>
+<tr><td><strong><?tr("Minute:");?></strong></td>
 <td><select id='pluginCronMinute' class='pluginCron'>
 <?=$pluginMinute?>
 </select></td></tr>
-<tr><td><strong>Custom (cron expression):</strong></td>
+<tr><td><strong><?tr("Custom (cron expression):");?></strong></td>
 <td><input type='text' id='pluginCronCustom' class='pluginCron'></td></tr>
 </table>
 </div></div>
@@ -356,7 +372,7 @@ function changeApply() {
 </div>
 <div>
 <table></table>
-<input type='button' value='Apply' class='applyButton' disabled onclick='apply();'><input type='button' value=' Done ' onclick="location.href='../Settings'">
+<input type='button' value='<?tr("Apply");?>' class='applyButton' disabled onclick='apply();'><input type='button' value='<?tr("Done");?>' onclick="location.href='../Settings'">
 <span id='settings'></span>
 <?if ($backTopTopIncluded == "false"):?>
 <a href="#" class="back-to-top" style="display: inline;">
@@ -364,9 +380,9 @@ function changeApply() {
 <?endif;?>
 </a></div>
 
-<a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
-<center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
-<center>Plugin Version: <strong><span class='caUpdateVersion'></span></strong></center>
+<a style='float:right;cursor:pointer' onclick='showCredits();'><?tr("Credits");?></a><br><br></span>
+<center><a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank"><?tr("Support");?></a></center>
+<center><?tr("Version");?>: <strong><span class='caUpdateVersion'></span></strong></center>
 
 <span id='testing'></span>
 </FORM>

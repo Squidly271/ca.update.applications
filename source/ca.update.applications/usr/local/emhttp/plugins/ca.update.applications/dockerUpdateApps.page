@@ -8,6 +8,9 @@ Title="Docker Auto Update Settings"
 #                                                             #
 ###############################################################
 
+$docroot = $docroot ?: $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+
+
 function searchArray($array,$key,$value) {
   if ( function_exists("array_column") && function_exists("array_search") ) {   # faster to use built in if it works
     $result = array_search($value, array_column($array, $key));   
@@ -52,7 +55,7 @@ if ( $dockerRunning == "true" ) {
     $dockerSettings .= "<td><div class='ca-switch-button-background autoUpdateDocker' style='width:25px; height:11px;'onclick='toggleDockerAutoStart(this);'>";
     $dockerSettings .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-docker='$container'>";
     $dockerSettings .= "</div></div>";
-    $span = $class ? "<span><font color='red'>Auto Update ON</font></span>" : "<span>Auto Update OFF</span>";
+    $span = $class ? "<span><font color='red'>".tr("Autoupdate ON",true)."</font></span>" : "<span>".tr("Autoupdate OFF",true)."</span>";
     $dockerSettings .= "$span</td><td>";
     if ( $column == 2 ) {
       $dockerSettings .= "</td></tr><tr>";
@@ -64,7 +67,7 @@ if ( $dockerRunning == "true" ) {
   }
   $dockerSettings .= "</table>";
 } else {
-  $dockerSettings = "<table><tr><td><center><font size='5' color='purple'>Docker Must Be Enabled For This Module To Operate</font></center></td></tr></table>";
+  $dockerSettings = "<table><tr><td><center><font size='5' color='purple'>".tr("Docker Must Be Enabled For This Module To Operate",true)."</font></center></td></tr></table>";
   $dockerUpdateSettings['global']['dockerUpdateAll'] = "no";
   $dockerUpdateSettings['cron']['dockerCronFrequency'] = "disabled";
 }
@@ -110,9 +113,9 @@ $(function() {
 function toggleDockerAutoStart(el) {
   $(el).find("div").toggleClass("unRaidDockerButton");
   if ( $(el).find("div").hasClass("unRaidDockerButton") ) {
-    $(el).parent().find("span").html("<font color='red'>Auto Update ON</font>");
+    $(el).parent().find("span").html("<font color='red'><?tr("Autoupdate ON");?></font>");
   } else {
-    $(el).parent().find("span").html("Auto Update OFF");
+    $(el).parent().find("span").html("<?tr("Autoupdate OFF");?>");
   }
   $("#dockerApply").prop("disabled",false);
 }
@@ -152,7 +155,7 @@ function toggleAll() {
 
 
 </script>
-> <center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
+> <center><a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank"><?tr("Support");?></a></center>
 > <br>
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
@@ -161,52 +164,52 @@ function toggleAll() {
 <div style='width:45%;float:left;'>
 <table>
 <tr>
-  <td><b>Send Notifications on Update?</b></td>
+  <td><b><?tr("Send Notifications On Update?");?></b></td>
   <td><select class='dockerSettings' id='dockerNotify' onchange=$('#dockerApply').prop('disabled',false);>
-    <option value='yes'>Yes</option>
-    <option value='no'>No</option>
+    <option value='yes'><?tr("Yes");?></option>
+    <option value='no'><?tr("No");?></option>
     </select></td>
 </tr>
 <tr>
-  <td><b>Time to wait for docker graceful stop before killing:</b></td>
+  <td><b><?tr("Time to wait for graceful stop before killing:");?></b></td>
   <td><input type='number' placeholder='10' class='narrow dockerSettings' id='dockerStopDelay' onchange=$('#dockerApply').prop('disabled',false);></td>
 </tr>
 <tr>
-  <td><b>Update All Docker Applications</b></td>
+  <td><b><?tr("Update All Docker Applications");?></b></td>
   <td><select class='dockerSettings' id='dockerUpdateAll' onchange='toggleAll();'>
-    <option value='yes'>Yes</option>
-    <option value='no'>No</option>
+    <option value='yes'><?tr("Yes");?></option>
+    <option value='no'><?tr("No");?></option>
     </select></td>
 </tr>
-<tr><td><strong>Update Check Frequency:</strong><br><font color='purple' size='0'>When selected an update time, ensure it does not overlap<br> with a time given for CA Backup Appdata</font></td>
+<tr><td><strong><?tr("Update Check Frequency:")?></strong><br><?tr("Do not overlap with autoupdate");?></td>
 <td><select id='dockerCronFrequency' class='dockerCron'>
-  <option value='disabled'>Disabled</option>
-  <option value='Daily'>Daily</option>
-  <option value='Weekly'>Weekly</option>
-  <option value='Monthly'>Monthly</option>
-  <option value='Custom'>Custom</option>
+  <option value='disabled'><?tr("Disabled");?></option>
+  <option value='Daily'><?tr("Daily");?></option>
+  <option value='Weekly'><?tr("Weekly");?></option>
+  <option value='Monthly'><?tr("Monthly");?></option>
+  <option value='Custom'><?tr("Custom");?></option>
 </select></td></tr>
 </tr></table>
 </div>
 <div style='width:45%;float:left;'>
 <table>
-<tr><td><strong>Day Of Week:</strong></td>
+<tr><td><strong><?tr("Day Of Week:")?></strong></td>
 <td><select id='dockerCronDay' class='dockerCron'>
 <?=$pluginDayScript?>
 </select></td></tr>
-<tr><td><strong>Day Of Month:</strong></td>
+<tr><td><strong><?tr("Day Of Month:");?></strong></td>
 <td><select id='dockerCronDayOfMonth' class='dockerCron'>
 <?=$pluginDayOfMonth?>
 </select></td></tr>
-<tr><td><strong>Hour:</strong></td>
+<tr><td><strong><?tr("Hour:")?></strong></td>
 <td><select id='dockerCronHour' class='dockerCron'>
 <?=$pluginCronHour?>
 </select></td></tr>
-<tr><td><strong>Minute:</strong></td>
+<tr><td><strong><?tr("Minute:");?></strong></td>
 <td><select id='dockerCronMinute' class='dockerCron'>
 <?=$pluginMinute?>
 </select></td></tr>
-<tr><td><strong>Custom (cron expression):</strong></td>
+<tr><td><strong><?tr("Custom (cron expression):");?></strong></td>
 <td><input type='text' id='dockerCronCustom' class='dockerCron'></td></tr>
 </table>
 </div></div>
@@ -215,8 +218,8 @@ function toggleAll() {
 <?=$dockerSettings?>
 </div>
 <table></table>
-<input type='button' id='dockerApply' value='Apply' onclick='dockerApply();' disabled><input type='button' value='Done' onclick='done();'>
+<input type='button' id='dockerApply' value='<?tr("Apply");?>' onclick='dockerApply();' disabled><input type='button' value='<?tr("Done");?>' onclick='done();'>
 
-<a style='float:right;cursor:pointer' onclick='showCredits();'>Credits</a><br><br></span>
-<center>For support for this plugin, visit here: <a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank">HERE</a></center>
-<center>Plugin Version: <strong><span class='caUpdateVersion'></span></strong></center>
+<a style='float:right;cursor:pointer' onclick='showCredits();'><?tr("Credits");?></a><br><br></span>
+<center><a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank"><?tr("Support");?></a></center>
+<center><?tr("Version");?> <strong><span class='caUpdateVersion'></span></strong></center>

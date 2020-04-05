@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2020.02.13">
-<!ENTITY md5       "50696b26b5de064446a81a98c755d980">
+<!ENTITY version   "2020.04.05">
+<!ENTITY md5       "1fafb15a358181de62cc9dfd3ca4b744">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2020.04.05
+- Multi language support
+
 ###2020.02.13
 - Update the optional start / stop scripts for work under 6.8+
 
