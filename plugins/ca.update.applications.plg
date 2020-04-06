@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2020.04.05">
-<!ENTITY md5       "1fafb15a358181de62cc9dfd3ca4b744">
+<!ENTITY version   "2020.04.05a">
+<!ENTITY md5       "0e9530b7049fbedb69bf79866db224b3">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">

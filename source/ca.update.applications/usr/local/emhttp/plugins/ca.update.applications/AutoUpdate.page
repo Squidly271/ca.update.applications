@@ -20,7 +20,7 @@ function tr($string,$ret=false) {
 		echo $string;
 }
 if ( ! function_exists("my_lang") ) {
-	function my_lang($string,$flag) {
+	function my_lang($string,$flag="") {
 		return $string;
 	}
 }
@@ -84,7 +84,7 @@ $daysArray = array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","
 $days = array_keys($daysArray);
 $dayCounter = 0;
 foreach ($daysArray as $day) {
-	$pluginDayScript .= "<option value='$dayCounter'>".my_lang($day)."</option>";
+	$pluginDayScript .= "<option value='$dayCounter'>".my_lang($day,0)."</option>";
 	++$dayCounter;
 }
 $dayOfMonthCounter = 1;
