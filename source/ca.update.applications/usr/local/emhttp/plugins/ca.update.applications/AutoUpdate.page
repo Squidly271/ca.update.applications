@@ -4,7 +4,7 @@ Title="Plugin Auto Update Settings"
 <?
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2017, Andrew Zawadzki #
+# Community Applications copyright 2015-2020, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 
@@ -24,6 +24,9 @@ if ( ! function_exists("my_lang") ) {
 		return $string;
 	}
 }
+
+$languageMessage = is_file("$docroot/plugins/dynamix/include/Translations.php") ? "<br>".tr("(Selecting Yes also updates languages)",true) : "";
+
 require_once("/usr/local/emhttp/plugins/dynamix.plugin.manager/include/PluginHelpers.php");
 require_once("/usr/local/emhttp/plugins/ca.update.applications/include/caCredits.php");
 
@@ -327,7 +330,7 @@ function changeApply() {
 </select></td>
 <tr><td><strong><?tr("Delay in days before updating applications:");?></strong></td>
 <td><input type='number' id='delay' class='narrow' oninput='changeApply();'></td>
-<tr><td><strong><?tr("Auto Update All Plugins?");?></strong></td>
+<tr><td><strong><?tr("Auto Update All Plugins?");?></strong><?=$languageMessage?></td>
 <td><select id='allPlugins' size='1' onchange='changeGlobal();'>
 	<option value='no'><?tr("No");?></option>
 	<option value='yes' <?=$globalUpdate?>><?tr("Yes");?></option>

@@ -1,5 +1,10 @@
 #!/usr/bin/php
 <?PHP
+###############################################################
+#                                                             #
+# Community Applications copyright 2015-2020, Andrew Zawadzki #
+#                                                             #
+###############################################################
 require_once("/usr/local/emhttp/plugins/dynamix.plugin.manager/include/PluginHelpers.php");
 
 $communityPaths['autoUpdateKillSwitch']          = "/usr/local/emhttp/plugins/ca.update.applications/autoUpdateKill";
@@ -97,6 +102,14 @@ foreach ($pluginsInstalled  as $plugin) {
       logger("Update available for $plugin (Not set to Auto Update)");
     }
   }
+}
+if ( $appList['Global'] == "true" ) {
+	$unRaidVersion = parse_ini_file("/etc/unraid-version");
+	if ( version_compare($unRaidVersion['version'],"6.9.0-beta1",">") ) {
+		logger("Checking for language updates");
+		exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/language checkall");
+		exec("/usr/local/emhttp/plugins/dynamix.plugin.manager/scripts/language updateall");
+	}
 }
 logger("Community Applications Plugin Auto Update finished");
 ?>
