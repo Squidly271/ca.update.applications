@@ -5,6 +5,9 @@
 # Community Applications copyright 2015-2020, Andrew Zawadzki #
 #                                                             #
 ###############################################################
+
+$docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: "/usr/local/emhttp";
+
 require_once("/usr/local/emhttp/plugins/dynamix.plugin.manager/include/PluginHelpers.php");
 
 $communityPaths['autoUpdateKillSwitch']          = "/usr/local/emhttp/plugins/ca.update.applications/autoUpdateKill";
