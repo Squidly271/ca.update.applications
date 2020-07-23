@@ -11,9 +11,9 @@ Title="Plugin Auto Update Settings"
 $docroot = $docroot ?: $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 
 
-function tr($string,$ret=false) {
+function tr($string,$ret=false,$options=-1) {
 	if ( function_exists("_") )
-		$string =  _($string);
+		$string =  _($string,$options);
 	if ( $ret )
 		return $string;
 	else
@@ -87,7 +87,7 @@ $daysArray = array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","
 $days = array_keys($daysArray);
 $dayCounter = 0;
 foreach ($daysArray as $day) {
-	$pluginDayScript .= "<option value='$dayCounter'>".my_lang($day,0)."</option>";
+	$pluginDayScript .= "<option value='$dayCounter'>".tr($day,true,0)."</option>";
 	++$dayCounter;
 }
 $dayOfMonthCounter = 1;
