@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2020.07.23">
-<!ENTITY md5       "487be6c42131df01bcf049b8cf5951a2">
+<!ENTITY version   "2020.09.27">
+<!ENTITY md5       "049b3f56b3d2380052bb11361b43b2b0">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2020.09.27
+- When running 6.9 Beta 27+, clicking on an alert from Update applications will take you to either Plugins or Docker Tabs as applicable
+
 ###2020.07.23
 - Fixed: Multi-language support
 

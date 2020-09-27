@@ -40,7 +40,7 @@ function checkPluginUpdate($filename) {
 }
 
 function notify($event,$subject,$description,$message="",$type="normal") {
-  $command = '/usr/local/emhttp/plugins/dynamix/scripts/notify -e "'.$event.'" -s "'.$subject.'" -d "'.$description.'" -m "'.$message.'" -i "'.$type.'"';
+  $command = '/usr/local/emhttp/plugins/dynamix/scripts/notify -e "'.$event.'" -s "'.$subject.'" -d "'.$description.'" -m "'.$message.'" -i "'.$type.'" -l "/Plugins"';
   shell_exec($command);
 }
 $unRaidVersion = parse_ini_file("/etc/unraid-version");
