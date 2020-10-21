@@ -184,7 +184,7 @@ function toggleAutoStart(el) {
 }
 
 
-var URL = "/plugins/<?=$plugin?>/include/exec.php";
+var caURL = "/plugins/<?=$plugin?>/include/exec.php";
 
 $(function() {
 	$(".pluginCron").change(function() {
@@ -279,7 +279,7 @@ function apply() {
 	var notify = $("#notify").val();
 	var delay = $("#delay").val();
 	var pluginCron = getCronSettings("plugin");
-	$.post(URL,{action:'autoUpdatePlugins',globalUpdate:globalUpdate,pluginList:myvalue,notify:notify,delay:delay,pluginCron:pluginCron},function(data) {
+	$.post(caURL,{action:'autoUpdatePlugins',globalUpdate:globalUpdate,pluginList:myvalue,notify:notify,delay:delay,pluginCron:pluginCron},function(data) {
 		if (data) {
 			$("#testing").html(data);
 		}

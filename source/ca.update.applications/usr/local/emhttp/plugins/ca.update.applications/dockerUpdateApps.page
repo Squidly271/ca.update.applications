@@ -85,7 +85,7 @@ if ( is_array($dockerUpdateSettings['cron']) ) {
 }
 </style>
 <script>
-var URL = "/plugins/<?=$plugin?>/include/exec.php";
+var caURL = "/plugins/<?=$plugin?>/include/exec.php";
 
 $(function() {
   if ( '<?=$dockerRunning?>' == "false" ) {
@@ -136,7 +136,7 @@ function dockerApply() {
   var dockerCron = getCronSettings("docker");
   var dockerNotify = $("#dockerNotify").val();
   var dockerUpdateAll = $("#dockerUpdateAll").val();
-  $.post(URL,{action:'dockerApply',dockerSettings:dockerSettings,autoUpdate:autoUpdate,dockerCron:dockerCron},function(data) {
+  $.post(caURL,{action:'dockerApply',dockerSettings:dockerSettings,autoUpdate:autoUpdate,dockerCron:dockerCron},function(data) {
     if (data) {
       $("#testing").html(data);
     }
