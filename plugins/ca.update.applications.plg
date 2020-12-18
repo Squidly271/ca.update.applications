@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2020.10.21">
-<!ENTITY md5       "e2120772e29cc98eb1b23bff50179756">
+<!ENTITY version   "2020.12.18">
+<!ENTITY md5       "3e70e185c68a9def1b39641688368333">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2020.12.18
+- If set to update all plugins and delay in days is 0, update every plugin regardless if it uses a conforming version date.
+
 ###2020.10.21
 - Compatibility Fixes
 

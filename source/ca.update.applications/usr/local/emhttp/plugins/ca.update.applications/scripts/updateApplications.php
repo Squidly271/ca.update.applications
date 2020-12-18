@@ -77,12 +77,14 @@ foreach ($pluginsInstalled  as $plugin) {
       if ( ! $pluginVersion ) continue;
       $pluginVersion = preg_replace('/[^0-9.]+/', "", $pluginVersion); # get rid of any alphabetic suffixes on the version date
       $pluginDate = date_create_from_format("Y.m.d",$pluginVersion);
-      if ( ! $pluginDate ) {
+      if ( ! $pluginDate && $appList['delay'] != 0 && $appList['Global'] != "true") {
         logger("$plugin has a non-conforming version string.  Cannot autoupdate");
         continue;
       }
-      $interval = date_diff($currentDate,$pluginDate);
-      $age = $interval->format("$R%a");
+      if ( $appList['delay'] != 0 ) {
+        $interval = date_diff($currentDate,$pluginDate);
+        $age = $interval->format("$R%a");
+      }
       if ( ($age >= $appList['delay']) || ($appList['delay'] == 0) ) {
         logger("Auto Updating $plugin");
  //       exec("mkdir -p /boot/config/plugins-old-versions/$plugin/$installedVersion");
