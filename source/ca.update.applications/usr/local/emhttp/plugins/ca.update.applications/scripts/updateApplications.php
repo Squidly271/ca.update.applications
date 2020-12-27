@@ -29,7 +29,7 @@ function checkPluginUpdate($filename) {
     $upgradeVersion = "0";
   }
   if ( $installedVersion < $upgradeVersion ) {
-    $unRaid = plugin("unRAID","/tmp/plugins/$filename");
+    $unRaid = plugin("min","/tmp/plugins/$filename");
     if ( $unRaid === false || version_compare($unRaidVersion['version'],$unRaid,">=") ) {
       return true;
     } else {
