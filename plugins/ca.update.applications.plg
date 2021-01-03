@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2020.12.27">
-<!ENTITY md5       "2cecf766c3cb2e869caed3790832e63e">
+<!ENTITY version   "2021.01.03">
+<!ENTITY md5       "ac450459af32e790fa688255e712aca5">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2021.01.03
+- Fixed: Operation of Done Button
+
 ###2020.12.27
 - Fix minimum OS version required to update plugin
 
@@ -179,7 +182,7 @@ rm -rf /usr/local/emhttp/plugins/ca.update.applications/caHelp.page
 echo ""
 echo "----------------------------------------------------"
 echo " &name; has been installed."
-echo " Copyright 2015-2020, Andrew Zawadzki"
+echo " Copyright 2015-2021, Andrew Zawadzki"
 echo " Version: &version;"
 echo "----------------------------------------------------"
 echo ""

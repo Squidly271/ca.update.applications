@@ -2,7 +2,7 @@
 <?PHP
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2020, Andrew Zawadzki #
+# Community Applications copyright 2015-2021, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 $docroot = $docroot ?: @$_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';

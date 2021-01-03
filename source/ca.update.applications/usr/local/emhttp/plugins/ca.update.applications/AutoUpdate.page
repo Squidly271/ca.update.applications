@@ -4,7 +4,7 @@ Title="Plugin Auto Update Settings"
 <?
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2020, Andrew Zawadzki #
+# Community Applications copyright 2015-2021, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 
@@ -375,7 +375,7 @@ function changeApply() {
 </div>
 <div>
 <table></table>
-<input type='button' value='<?tr("Apply");?>' class='applyButton' disabled onclick='apply();'><input type='button' value='<?tr("Done");?>' onclick="location.href='../Settings'">
+<input type='button' value='<?tr("Apply");?>' class='applyButton' disabled onclick='apply();'><input type='button' value='<?tr("Done");?>' onclick="done();">
 <span id='settings'></span>
 <?if ($backTopTopIncluded == "false"):?>
 <a href="#" class="back-to-top" style="display: inline;">
