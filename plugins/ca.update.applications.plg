@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2021.03.10">
-<!ENTITY md5       "7c82f4931e513ed99f826388e5e43d8c">
+<!ENTITY version   "2021.07.19">
+<!ENTITY md5       "f47df55d6f47b9fd626b6b3f2145894a">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2021.07.19
+- 6.10.0 compatibility fixes
+
 ###2021.03.10
 - Permission Fixes
 

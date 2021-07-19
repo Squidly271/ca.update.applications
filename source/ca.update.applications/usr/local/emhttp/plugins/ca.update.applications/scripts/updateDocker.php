@@ -28,7 +28,8 @@ if ( ! is_dir("/var/lib/docker/tmp") ) {
   exit;
 }
 logger("Checking for available updates");
-exec("/usr/local/emhttp/plugins/dynamix.docker.manager/scripts/dockerupdate.php check nonotify &> /dev/null");
+$updateScript = is_file("/usr/local/emhttp/plugins/dynamix.docker.manager/scripts/dockerupdate") ? "dockerupdate" : "dockerupdate.php";
+exec("/usr/local/emhttp/plugins/dynamix.docker.manager/scripts/$updateScript check nonotify &> /dev/null");
 $settings = json_decode(@file_get_contents("/boot/config/plugins/ca.update.applications/DockerUpdateSettings.json"),true);
 if ( ! $settings ) {
   logger("No settings file found");
