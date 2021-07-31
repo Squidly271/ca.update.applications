@@ -3,7 +3,7 @@
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
 <!ENTITY version   "2021.07.31">
-<!ENTITY md5       "29e0807efc0a7252e67454ddff2c9f47">
+<!ENTITY md5       "c5854e98b10b7bd5066f1fce28d424ca">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2021.07.31a
+- I'm an idiot
+
 ###2021.07.31
 - Silence PHP error under certain circumstances
 

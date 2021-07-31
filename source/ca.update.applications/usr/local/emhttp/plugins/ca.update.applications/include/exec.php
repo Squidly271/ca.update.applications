@@ -97,7 +97,7 @@ case 'dockerApply':
   foreach($dockerCron as $cronSetting) {
     $dockerSettings['cron'][$cronSetting[0]] = trim($cronSetting[1]);
   }
-	if ( ! is_array($containes) {
+	if ( ! is_array($containers) ) {
 		$dockerSettings['containers'] = array();
 	} else {
 		foreach($containers as $container) {
