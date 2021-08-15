@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2021.07.31a">
-<!ENTITY md5       "c5854e98b10b7bd5066f1fce28d424ca">
+<!ENTITY version   "2021.08.15">
+<!ENTITY md5       "ceacae1024c761ada688e75688c6ddb9">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2021.08.15
+- Apps missing a registry URL would not appear in the list to update
+
 ###2021.07.31a
 - I'm an idiot
 

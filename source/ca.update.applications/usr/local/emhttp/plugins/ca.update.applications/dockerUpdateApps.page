@@ -42,9 +42,8 @@ if ( $dockerRunning == "true" ) {
 
   $dockerSettings = "<table><tr>";
   $containerNames = array_keys($info);
-
   foreach ($containerNames as $container) {
-		if ( ! $info[$container]['registry'] ) { continue; }
+//		if ( ! $info[$container]['registry'] ) { continue; }
     $class = $dockerUpdateSettings['containers'][$container]['update'] ? "unRaidDockerButton" : null;
     $index = searchArray($moreInfo,"Name",$container);
     $repository = ($index === false) ? "Unknown" : $moreInfo[$index]['Image'];
