@@ -75,6 +75,11 @@ foreach ($pluginsInstalled  as $plugin) {
       $installedVersion = plugin("version","/var/log/plugins/$plugin");
       if ( $pluginVersion == $installedVersion) continue;
       if ( ! $pluginVersion ) continue;
+			$tmpPlg = explode(".",$pluginVersion);
+			if (count($tmpPlg) > 3) {
+				array_pop($tmpPlg);
+				$pluginVersion = implode(".",$tmpPlg);
+			}
       $pluginVersion = preg_replace('/[^0-9.]+/', "", $pluginVersion); # get rid of any alphabetic suffixes on the version date
       $pluginDate = date_create_from_format("Y.m.d",$pluginVersion);
       if ( ! $pluginDate && $appList['delay'] != 0 && $appList['Global'] != "true") {
