@@ -180,7 +180,7 @@ function toggleAll() {
     <option value='no'><?tr("No");?></option>
     </select></td>
 </tr>
-<tr><td><strong><?tr("Update Check Frequency:")?></strong><br><?tr("Do not overlap with autoupdate");?></td>
+<tr><td><strong><?tr("Update Check Frequency:")?></strong><br><?tr("Do not overlap with a backup schedule");?></td>
 <td><select id='dockerCronFrequency' class='dockerCron'>
   <option value='disabled'><?tr("Disabled");?></option>
   <option value='Daily'><?tr("Daily");?></option>
