@@ -46,9 +46,9 @@ if ( ! $updateSettings ) {
 	$updateSettings['ca.update.applications.plg'] = "true";
 	$updateSettings['pluginCronFrequency'] = "Daily";
 }
-if ( ! $updateSettings['notify'] ) { $updateSettings['notify'] = "yes"; }
+if ( ! $updateSettings['notify'] ?? false ) { $updateSettings['notify'] = "yes"; }
 if ( ! isset($updateSettings['delay']) ) { $updateSettings['delay'] = "3"; }
-if ( ! $updateSettings['pluginCronFrequency'] ) { $updateSettings['pluginCronFrequency'] = "Daily"; }
+if ( ! ($updateSettings['pluginCronFrequency'] ?? false) ) { $updateSettings['pluginCronFrequency'] = "Daily"; }
 if ( $updateSettings['Global'] == "true" ) {
 	$globalUpdate = "selected";
 } 
@@ -60,7 +60,7 @@ foreach ($pluginsFolder as $pluginFile) {
 	}
 
 	if ( pathinfo($pluginFile, PATHINFO_EXTENSION) == "plg" ) {
-		if ( $updateSettings[$pluginFile] ) {
+		if ( isset($updateSettings[$pluginFile]) ) {
 			$selected = "selected";
 		} else {
 			$selected = "";
@@ -75,7 +75,7 @@ foreach ($pluginsFolder as $pluginFile) {
 		}
 		$displayOptions .= "<td>".Markdown(@file_get_contents("/usr/local/emhttp/plugins/".@plugin("name","/var/log/plugins/$pluginFile")."/README.md"))."</td><td>";
 		$displayOptions .= "<div class='ca-switch-button-background autoUpdatePlugin' style='width:25px; height:11px;'onclick='toggleAutoStart(this);'>";
-		$class = $updateSettings[$pluginFile] ? "unRaidAutoButton" : null;
+		$class = ($updateSettings[$pluginFile] ?? false) ? "unRaidAutoButton" : null;
 		$displayOptions .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-plugin='$pluginFile'>";
 		$displayOptions .= "</div></div>";
 		$displayOptions .= $class ? "<span><center><font color='red'>".tr("Autoupdate ON",true)."</font></center></span>" : "<span><center>".tr("Autoupdate OFF",true)."</center></span>";
@@ -86,14 +86,18 @@ $displayOptions .= "</tbody></table>";
 $daysArray = array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
 $days = array_keys($daysArray);
 $dayCounter = 0;
+$pluginDayScript = "";
+
 foreach ($daysArray as $day) {
 	$pluginDayScript .= "<option value='$dayCounter'>".tr($day,true,0)."</option>";
 	++$dayCounter;
 }
 $dayOfMonthCounter = 1;
+$pluginDayOfMonth = "";
 for ($i = 1; $i < 32; $i++) {
 	$pluginDayOfMonth .= "<option value='$i'>$i</option>";
 }
+$pluginCronHour = "";
 for ($i = 0; $i <24; $i++) {
 	$human = $i;
 	if ( $i > 12 ) {
@@ -109,9 +113,11 @@ for ($i = 0; $i <24; $i++) {
 	}
 	$pluginCronHour .= "<option value='$i'>$human</option>";
 }
+$pluginMinute = "";
 for ($i = 0; $i<60; $i++) {
 	$pluginMinute .= "<option value='$i'>$i</option>";
 }
+$pluginCronScript = "";
 if ( is_array($updateSettings['cron']) ) {
 	$cronSettings = array_keys($updateSettings['cron']);
 	foreach ($cronSettings as $setting) {

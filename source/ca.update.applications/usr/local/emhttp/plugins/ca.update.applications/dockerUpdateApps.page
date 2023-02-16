@@ -31,8 +31,8 @@ require_once("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerCli
 $dockerRunning = is_dir("/var/lib/docker/tmp") ? "true" : "false";
 
 $dockerUpdateSettings = json_decode(@file_get_contents("/boot/config/plugins/ca.update.applications/DockerUpdateSettings.json"),true);
-if ( ! $dockerUpdateSettings['global']['dockerNotify'] )    { $dockerUpdateSettings['global']['dockerNotify'] = "yes"; }
-if ( ! $dockerUpdateSettings['global']['dockerUpdateAll'] ) { $dockerUpdateSettings['global']['dockerUpdateAll'] = "no"; }
+if ( ! isset($dockerUpdateSettings['global']['dockerNotify']) )    { $dockerUpdateSettings['global']['dockerNotify'] = "yes"; }
+if ( ! isset($dockerUpdateSettings['global']['dockerUpdateAll']) ) { $dockerUpdateSettings['global']['dockerUpdateAll'] = "no"; }
 
 if ( $dockerRunning == "true" ) {
   $DockerTemplates = new DockerTemplates();
@@ -42,9 +42,9 @@ if ( $dockerRunning == "true" ) {
 
   $dockerSettings = "<table><tr>";
   $containerNames = array_keys($info);
+	$column = 0;
   foreach ($containerNames as $container) {
-//		if ( ! $info[$container]['registry'] ) { continue; }
-    $class = $dockerUpdateSettings['containers'][$container]['update'] ? "unRaidDockerButton" : null;
+    $class = ($dockerUpdateSettings['containers'][$container]['update'] ?? false) ? "unRaidDockerButton" : null;
     $index = searchArray($moreInfo,"Name",$container);
     $repository = ($index === false) ? "Unknown" : $moreInfo[$index]['Image'];
 		$icon = $info[$container]['icon'] ?: "/plugins/dynamix.docker.manager/images/question.png";
