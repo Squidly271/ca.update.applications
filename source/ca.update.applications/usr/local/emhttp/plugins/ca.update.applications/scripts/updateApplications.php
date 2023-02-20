@@ -2,7 +2,7 @@
 <?PHP
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2021, Andrew Zawadzki #
+# Community Applications copyright 2015-2023, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 
@@ -69,7 +69,7 @@ foreach ($pluginsInstalled  as $plugin) {
   }
   if ( $plugin == "unRAIDServer.plg" ) { continue; }
   if ( checkPluginUpdate($plugin) ) {
-    if ( $appList['Global'] == "true" || $appList[$plugin] ) {
+    if ( $appList['Global'] == "true" || ($appList[$plugin] ?? false) ) {
       $pluginVersion = plugin("version","/tmp/plugins/$plugin");
       $pluginVersionOriginal = $pluginVersion;
       $installedVersion = plugin("version","/var/log/plugins/$plugin");
@@ -88,7 +88,8 @@ foreach ($pluginsInstalled  as $plugin) {
       }
       if ( $appList['delay'] != 0 ) {
         $interval = date_diff($currentDate,$pluginDate);
-        $age = $interval->format("$R%a");
+        $age = $interval->format("%d");
+				
       }
       if ( ($age >= $appList['delay']) || ($appList['delay'] == 0) ) {
         logger("Auto Updating $plugin");
@@ -106,7 +107,7 @@ foreach ($pluginsInstalled  as $plugin) {
           }
         }
       } else {
-        logger("$plugin version $pluginVersionOriginal does not meet age requirements to update");
+        logger("$plugin version $pluginVersionOriginal does not meet age requirements to update - $age days old");
       }
     } else {
       logger("Update available for $plugin (Not set to Auto Update)");

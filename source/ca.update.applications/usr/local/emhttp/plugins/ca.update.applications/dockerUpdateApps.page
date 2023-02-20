@@ -4,7 +4,7 @@ Title="Docker Auto Update Settings"
 <?PHP
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2021, Andrew Zawadzki #
+# Community Applications copyright 2015-2023, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 
@@ -70,6 +70,7 @@ if ( $dockerRunning == "true" ) {
   $dockerUpdateSettings['global']['dockerUpdateAll'] = "no";
   $dockerUpdateSettings['cron']['dockerCronFrequency'] = "disabled";
 }
+$dockerCronScript = "";
 if ( is_array($dockerUpdateSettings['cron']) ) {
   $dockerCronSettings = array_keys($dockerUpdateSettings['cron']);
   foreach ($dockerCronSettings as $setting) {

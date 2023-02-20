@@ -4,7 +4,7 @@ Title="Plugin Auto Update Settings"
 <?
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2021, Andrew Zawadzki #
+# Community Applications copyright 2015-2023, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 
@@ -46,12 +46,10 @@ if ( ! $updateSettings ) {
 	$updateSettings['ca.update.applications.plg'] = "true";
 	$updateSettings['pluginCronFrequency'] = "Daily";
 }
-if ( ! $updateSettings['notify'] ?? false ) { $updateSettings['notify'] = "yes"; }
-if ( ! isset($updateSettings['delay']) ) { $updateSettings['delay'] = "3"; }
-if ( ! ($updateSettings['pluginCronFrequency'] ?? false) ) { $updateSettings['pluginCronFrequency'] = "Daily"; }
-if ( $updateSettings['Global'] == "true" ) {
-	$globalUpdate = "selected";
-} 
+$updateSettings['notify'] = ($updateSettings['notify'] ?? false)  ?  "yes" : "";
+$updateSettings['delay'] =  ! isset($updateSettings['delay']) ? "3" : "";
+$updateSettings['pluginCronFrequency'] = ! ($updateSettings['pluginCronFrequency'] ?? false) ? "Daily" : "";
+$globalUpdate = $updateSettings['Global'] == "true" ? "selected" : ""; 
 
 $displayOptions = "<table class='tablesorter'><thead><th>&nbsp;</th><th></th><th></th><th></th></thead><tbody>";
 foreach ($pluginsFolder as $pluginFile) {
@@ -198,10 +196,6 @@ $(function() {
 		changeApply();
 	});
 	
-	
-	if ( "<?=$upgradeAvailable?>" == "true" ) {
-		$("#upgradeAvailable").show();
-	}
 	changeGlobal();
 	$("#notify").val('<?=$updateSettings['notify']?>');
 	$("#delay").val('<?=$updateSettings['delay']?>');

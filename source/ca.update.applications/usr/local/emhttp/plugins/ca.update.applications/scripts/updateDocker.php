@@ -5,7 +5,7 @@
 # Community Applications copyright 2015-2021, Andrew Zawadzki #
 #                                                             #
 ###############################################################
-$docroot = $docroot ?: @$_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+$docroot = $docroot ?? @$_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 $_SERVER['DOCUMENT_ROOT'] = "/usr/local/emhttp";
 
 require_once("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerClient.php");
@@ -54,15 +54,16 @@ $allContainers = array_keys($info);
 $updateAll = $settings['global']['dockerUpdateAll'] == "yes";
 
 foreach($allContainers as $container) {
+	if ( ! $container ) continue;
   if ( ! $info[$container]['updated'] || $info[$container]['updated'] == "false" ) {
-    if ( $settings['containers'][$container]['name'] || $updateAll ) {
+    if ( ($settings['containers'][$container]['name'] ?? false) || $updateAll ) {
       $updateList[] = $container;
     } else {
       logger("Found update for $container.  Not set to autoupdate");
     }
   }
 }
-if ( ! $updateList ) {
+if ( ! isset($updateList) ) {
   logger("No updates will be installed");
   exit;
 }
