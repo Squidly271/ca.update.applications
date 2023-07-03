@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2023.02.20">
-<!ENTITY md5       "c592fdc8a91b5a7b6dcc9f94ab3d708a">
+<!ENTITY version   "2023.07.03">
+<!ENTITY md5       "ff20256e18cce976330340140ce2e7a5">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2023.07.03
+- PHP8 Upgrades
+
 ###2023.02.20
 - PHP8 Upgrades
 - Plugin Age fix

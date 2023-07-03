@@ -71,7 +71,7 @@ if ( $dockerRunning == "true" ) {
   $dockerUpdateSettings['cron']['dockerCronFrequency'] = "disabled";
 }
 $dockerCronScript = "";
-if ( is_array($dockerUpdateSettings['cron']) ) {
+if ( isset($dockerUpdateSettings['cron']) && is_array($dockerUpdateSettings['cron']) ) {
   $dockerCronSettings = array_keys($dockerUpdateSettings['cron']);
   foreach ($dockerCronSettings as $setting) {
     $dockerCronScript .= "$('#$setting').val('".$dockerUpdateSettings['cron'][$setting]."');";
@@ -103,7 +103,7 @@ $(function() {
 
   $("#dockerNotify").val("<?=$dockerUpdateSettings['global']['dockerNotify']?>");
   $("#dockerUpdateAll").val("<?=$dockerUpdateSettings['global']['dockerUpdateAll']?>");
-  $("#dockerStopDelay").val("<?=$dockerUpdateSettings['global']['dockerStopDelay']?>");
+  $("#dockerStopDelay").val("<?=$dockerUpdateSettings['global']['dockerStopDelay'] ?? ""?>");
   
   if ( "<?=$dockerUpdateSettings['global']['dockerUpdateAll']?>" == "yes" ) {
     $("#dockerApps").hide();

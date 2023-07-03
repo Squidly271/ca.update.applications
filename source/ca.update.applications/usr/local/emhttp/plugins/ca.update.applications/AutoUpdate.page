@@ -49,7 +49,7 @@ if ( ! $updateSettings ) {
 $updateSettings['notify'] = ($updateSettings['notify'] ?? false)  ?  "yes" : "";
 $updateSettings['delay'] =  ! isset($updateSettings['delay']) ? "3" : "";
 $updateSettings['pluginCronFrequency'] = ! ($updateSettings['pluginCronFrequency'] ?? false) ? "Daily" : "";
-$globalUpdate = $updateSettings['Global'] == "true" ? "selected" : ""; 
+$globalUpdate = ($updateSettings['Global'] ?? false) == "true" ? "selected" : ""; 
 
 $displayOptions = "<table class='tablesorter'><thead><th>&nbsp;</th><th></th><th></th><th></th></thead><tbody>";
 foreach ($pluginsFolder as $pluginFile) {
@@ -116,7 +116,7 @@ for ($i = 0; $i<60; $i++) {
 	$pluginMinute .= "<option value='$i'>$i</option>";
 }
 $pluginCronScript = "";
-if ( is_array($updateSettings['cron']) ) {
+if ( is_array($updateSettings['cron'] ?? null) ) {
 	$cronSettings = array_keys($updateSettings['cron']);
 	foreach ($cronSettings as $setting) {
 		$pluginCronScript .= "$('#$setting').val('".$updateSettings['cron'][$setting]."');";
