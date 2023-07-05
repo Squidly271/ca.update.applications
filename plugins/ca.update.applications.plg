@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2023.07.04">
-<!ENTITY md5       "e6a2335741fc687a51fe796fcf1532c6">
+<!ENTITY version   "2023.07.05">
+<!ENTITY md5       "a9c265423dfed4cbea7c22b35fc872c6">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2023.07.05
+- Fix regression error
+
 ###2023.07.04
 - Fix regression error on plugin delay in days
 

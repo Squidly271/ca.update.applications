@@ -46,7 +46,7 @@ if ( ! $updateSettings ) {
 	$updateSettings['ca.update.applications.plg'] = "true";
 	$updateSettings['pluginCronFrequency'] = "Daily";
 }
-$updateSettings['notify'] = ($updateSettings['notify'] ?? false)  ?  "yes" : "";
+$updateSettings['notify'] = ($updateSettings['notify'] ?? "no");
 $updateSettings['delay'] =  ($updateSettings['delay'] ?? "3") ?: "3";
 
 $updateSettings['pluginCronFrequency'] = ! ($updateSettings['pluginCronFrequency'] ?? false) ? "Daily" : "";
