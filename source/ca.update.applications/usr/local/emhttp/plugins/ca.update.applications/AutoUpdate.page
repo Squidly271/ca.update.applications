@@ -47,7 +47,8 @@ if ( ! $updateSettings ) {
 	$updateSettings['pluginCronFrequency'] = "Daily";
 }
 $updateSettings['notify'] = ($updateSettings['notify'] ?? "no");
-$updateSettings['delay'] =  ($updateSettings['delay'] ?? "3") ?: "3";
+$updateSettings['delay'] =  ($updateSettings['delay'] ?? "3");
+
 
 $updateSettings['pluginCronFrequency'] = ! ($updateSettings['pluginCronFrequency'] ?? false) ? "Daily" : "";
 $globalUpdate = ($updateSettings['Global'] ?? false) == "true" ? "selected" : ""; 

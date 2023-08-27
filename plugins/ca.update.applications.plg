@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2023.07.05">
-<!ENTITY md5       "a9c265423dfed4cbea7c22b35fc872c6">
+<!ENTITY version   "2023.08.27">
+<!ENTITY md5       "02fa42ed186c8b81a9602cbf1e735131">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2923.08.27
+- Fix delay in delays reverting to 3 if set to 0
+
 ###2023.07.05
 - Fix regression error
 
