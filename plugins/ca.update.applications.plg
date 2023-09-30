@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2023.08.27">
-<!ENTITY md5       "02fa42ed186c8b81a9602cbf1e735131">
+<!ENTITY version   "2023.09.30">
+<!ENTITY md5       "f572afefefb2c9cb3dade3f4dec6bd46">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,7 +13,10 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
-###2923.08.27
+###2023.09.30
+- Changed: Run update_cron at array start (Fixes issue with OS 6.12.4)
+
+###2023.08.27
 - Fix delay in delays reverting to 3 if set to 0
 
 ###2023.07.05
