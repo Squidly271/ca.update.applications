@@ -35,7 +35,7 @@ $caCredits = "
       </tr>
     </table></center>
     <br>
-    <center><em><font size='1'>Copyright 2015-2016 Andrew Zawadzki</font></em></center>
+    <center><em><font size='1'>Copyright 2015-2024 Andrew Zawadzki</font></em></center>
     <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a></center>
     <br><center><a href='https://forums.lime-technology.com/topic/51959-plugin-ca-application-auto-update/' target='_blank'>Plugin Support Thread</a></center>
   ";

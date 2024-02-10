@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2023.09.30">
-<!ENTITY md5       "f572afefefb2c9cb3dade3f4dec6bd46">
+<!ENTITY version   "2024.02.10">
+<!ENTITY md5       "a79e1ef6737632b705d53f0a781204f0">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2024.02.10
+- PHP8 Fixes
+
 ###2023.09.30
 - Changed: Run update_cron at array start (Fixes issue with OS 6.12.4)
 

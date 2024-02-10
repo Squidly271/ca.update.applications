@@ -2,7 +2,7 @@
 <?PHP
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2023, Andrew Zawadzki #
+# Community Applications copyright 2015-2024, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 
@@ -82,8 +82,13 @@ foreach ($pluginsInstalled  as $plugin) {
 			}
       $pluginVersion = preg_replace('/[^0-9.]+/', "", $pluginVersion); # get rid of any alphabetic suffixes on the version date
       $pluginDate = date_create_from_format("Y.m.d",$pluginVersion);
+
       if ( ! $pluginDate && $appList['delay'] != 0 && $appList['Global'] != "true") {
         logger("$plugin has a non-conforming version string.  Cannot autoupdate");
+        continue;
+      }
+      if ( ! $pluginDate ) {
+        logger("$plugin did not return valid date $pluginVersion");
         continue;
       }
       if ( $appList['delay'] != 0 ) {
