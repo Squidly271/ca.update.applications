@@ -91,6 +91,7 @@ foreach ($pluginsInstalled  as $plugin) {
         logger("$plugin did not return valid date $pluginVersion");
         continue;
       }
+      $age = 0;
       if ( $appList['delay'] != 0 ) {
         $interval = date_diff($currentDate,$pluginDate);
         $age = $interval->format("%d");
