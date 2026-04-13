@@ -73,7 +73,8 @@ if ( $dockerRunning == "true" ) {
     }
   }
   if ( ! $hasVisibleContainers ) {
-    $dockerSettings .= "</tr><tr><td><em>".tr("No DockerMan-managed containers available.",true)."</em></td></tr>";
+    $emptyStateMessage = $ignoreThirdParty ? "No DockerMan-managed containers available." : "No containers available.";
+    $dockerSettings .= "</tr><tr><td><em>".tr($emptyStateMessage,true)."</em></td></tr>";
   }
   $dockerSettings .= "</table>";
 } else {
