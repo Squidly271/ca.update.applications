@@ -1,7 +1,7 @@
 <?PHP
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2024, Andrew Zawadzki #
+# Community Applications copyright 2015-2026, Andrew Zawadzki #
 #                                                             #
 ###############################################################
 
@@ -15,7 +15,7 @@ function getPost($setting,$default) {
   return isset($_POST[$setting]) ? urldecode(($_POST[$setting])) : $default;
 }
 function getPostArray($setting) {
-  return $_POST[$setting];
+  return $_POST[$setting] ?? [];
 }
 ##################################################################
 #                                                                #

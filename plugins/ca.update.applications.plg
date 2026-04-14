@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
-<!ENTITY version   "2024.03.17">
-<!ENTITY md5       "254aecff90200cc4fe8054906900cb77">
+<!ENTITY version   "2026.04.14">
+<!ENTITY md5       "d0760c36f95197fe5ae69ea9966402c4">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
@@ -13,6 +13,10 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" icon="refresh">
 
 <CHANGES>
+###2026.04.14
+- PHP8 Fixes
+- Option to ignore updates on 3rd party containers (Thanks @mstrhakr)
+
 ###2024.03.17
 - PHP8 Fixes
 
