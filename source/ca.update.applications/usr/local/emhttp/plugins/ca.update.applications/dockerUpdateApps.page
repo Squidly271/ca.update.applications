@@ -33,6 +33,7 @@ $dockerRunning = is_dir("/var/lib/docker/tmp") ? "true" : "false";
 $dockerUpdateSettings = json_decode(@file_get_contents("/boot/config/plugins/ca.update.applications/DockerUpdateSettings.json"),true);
 if ( ! isset($dockerUpdateSettings['global']['dockerNotify']) )    { $dockerUpdateSettings['global']['dockerNotify'] = "yes"; }
 if ( ! isset($dockerUpdateSettings['global']['dockerUpdateAll']) ) { $dockerUpdateSettings['global']['dockerUpdateAll'] = "no"; }
+if ( ! isset($dockerUpdateSettings['global']['dockerIgnoreThirdParty']) ) { $dockerUpdateSettings['global']['dockerIgnoreThirdParty'] = "no"; }
 
 if ( $dockerRunning == "true" ) {
   $DockerTemplates = new DockerTemplates();
@@ -43,10 +44,17 @@ if ( $dockerRunning == "true" ) {
   $dockerSettings = "<table><tr>";
   $containerNames = array_keys($info);
 	$column = 0;
+  $hasVisibleContainers = false;
+  $ignoreThirdParty = ($dockerUpdateSettings['global']['dockerIgnoreThirdParty'] ?? "no") == "yes";
   foreach ($containerNames as $container) {
     $class = ($dockerUpdateSettings['containers'][$container]['update'] ?? false) ? "unRaidDockerButton" : null;
     $index = searchArray($moreInfo,"Name",$container);
     $repository = ($index === false) ? "Unknown" : $moreInfo[$index]['Image'];
+		$manager = ($index === false) ? false : ($moreInfo[$index]['Manager'] ?? false);
+		if ( $ignoreThirdParty && $manager != "dockerman" ) {
+			continue;
+		}
+		$hasVisibleContainers = true;
 		$icon = $info[$container]['icon'] ?: "/plugins/dynamix.docker.manager/images/question.png";
     $dockerSettings .= "<td width:25%;>";
     $dockerSettings .= "<img src='$icon' width=48px; height=48px;></td>";
@@ -63,6 +71,10 @@ if ( $dockerRunning == "true" ) {
       ++$column;
       $dockerSettings .= "</td><td>&nbsp;</td><td style='border-right:solid thin;'>&nbsp;</td> <td>&nbsp;</td><td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>   ";
     }
+  }
+  if ( ! $hasVisibleContainers ) {
+    $emptyStateMessage = $ignoreThirdParty ? "No DockerMan-managed containers available." : "No containers available.";
+    $dockerSettings .= "</tr><tr><td><em>".tr($emptyStateMessage,true)."</em></td></tr>";
   }
   $dockerSettings .= "</table>";
 } else {
@@ -103,6 +115,7 @@ $(function() {
 
   $("#dockerNotify").val("<?=$dockerUpdateSettings['global']['dockerNotify']?>");
   $("#dockerUpdateAll").val("<?=$dockerUpdateSettings['global']['dockerUpdateAll']?>");
+  $("#dockerIgnoreThirdParty").val("<?=$dockerUpdateSettings['global']['dockerIgnoreThirdParty']?>");
   $("#dockerStopDelay").val("<?=$dockerUpdateSettings['global']['dockerStopDelay'] ?? ""?>");
   
   if ( "<?=$dockerUpdateSettings['global']['dockerUpdateAll']?>" == "yes" ) {
@@ -165,18 +178,25 @@ function toggleAll() {
 <table>
 <tr>
   <td><b><?tr("Send Notifications On Update?");?></b></td>
-  <td><select class='dockerSettings' id='dockerNotify' onchange=$('#dockerApply').prop('disabled',false);>
+  <td><select class='dockerSettings' id='dockerNotify' onchange="$('#dockerApply').prop('disabled',false);">
     <option value='yes'><?tr("Yes");?></option>
     <option value='no'><?tr("No");?></option>
     </select></td>
 </tr>
 <tr>
   <td><b><?tr("Time to wait for graceful stop before killing:");?></b></td>
-  <td><input type='number' placeholder='10' class='narrow dockerSettings' id='dockerStopDelay' onchange=$('#dockerApply').prop('disabled',false);></td>
+  <td><input type='number' placeholder='10' class='narrow dockerSettings' id='dockerStopDelay' onchange="$('#dockerApply').prop('disabled',false);"></td>
 </tr>
 <tr>
   <td><b><?tr("Update All Docker Applications");?></b></td>
   <td><select class='dockerSettings' id='dockerUpdateAll' onchange='toggleAll();'>
+    <option value='yes'><?tr("Yes");?></option>
+    <option value='no'><?tr("No");?></option>
+    </select></td>
+</tr>
+<tr>
+  <td><b><?tr("Ignore 3rd Party Containers");?></b></td>
+  <td><select class='dockerSettings' id='dockerIgnoreThirdParty' onchange="$('#dockerApply').prop('disabled',false);">
     <option value='yes'><?tr("Yes");?></option>
     <option value='no'><?tr("No");?></option>
     </select></td>

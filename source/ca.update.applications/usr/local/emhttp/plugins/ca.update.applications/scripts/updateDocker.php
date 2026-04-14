@@ -52,9 +52,18 @@ foreach ($containers as $container) {
 $allContainers = array_keys($info);
 
 $updateAll = $settings['global']['dockerUpdateAll'] == "yes";
+$ignoreThirdParty = ($settings['global']['dockerIgnoreThirdParty'] ?? "no") == "yes";
+$managedBy = array();
+foreach ($containers as $container) {
+	$managedBy[$container['Name']] = $container['Manager'] ?? false;
+}
 
 foreach($allContainers as $container) {
 	if ( ! $container ) continue;
+  if ( $ignoreThirdParty && ($managedBy[$container] ?? false) != "dockerman" ) {
+    logger("Skipping $container (not DockerMan-managed)");
+    continue;
+  }
   if ( ! $info[$container]['updated'] || $info[$container]['updated'] == "false" ) {
     if ( ($settings['containers'][$container]['name'] ?? false) || $updateAll ) {
       $updateList[] = $container;
