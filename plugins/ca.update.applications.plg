@@ -3,7 +3,7 @@
 <!ENTITY name      "ca.update.applications">
 <!ENTITY author    "Andrew Zawadzki">
 <!ENTITY version   "2026.04.14">
-<!ENTITY md5       "d0760c36f95197fe5ae69ea9966402c4">
+<!ENTITY md5       "3a233fb36b9b62d75f3c7323c215bbc7">
 <!ENTITY launch    "Settings/AutoUpdateApps">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Squidly271/ca.update.applications">
