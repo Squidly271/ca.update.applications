@@ -49,7 +49,8 @@ foreach ($containers as $container) {
 	$info[$container['Name']]['Name'] = $container['Name'];
 }
 
-$allContainers = array_keys($info);
+// Cached DockerMan info can contain deleted containers; use the live Docker list.
+$allContainers = array_column($containers, 'Name');
 
 $updateAll = $settings['global']['dockerUpdateAll'] == "yes";
 $ignoreThirdParty = ($settings['global']['dockerIgnoreThirdParty'] ?? "no") == "yes";
