@@ -97,16 +97,9 @@ case 'dockerApply':
   foreach($dockerCron as $cronSetting) {
     $dockerSettings['cron'][$cronSetting[0]] = trim($cronSetting[1]);
   }
-	if ( ! is_array($containers) ) {
-		$dockerSettings['containers'] = array();
-	} else {
-		foreach($containers as $container) {
-			$tmp['name'] = $container;
-			$tmp['update'] = true;
-			$dockerSettings['containers'][$container] = $tmp;
-		}
-  }
-	
+  $savedContainers = readJsonFile("/boot/config/plugins/ca.update.applications/DockerUpdateSettings.json")['containers'] ?? [];
+  $dockerSettings['containers'] = mergeAutoUpdateContainers($savedContainers,$containers,getPostArray("offered"));
+
   foreach ($settings as $setting) {
     $dockerSettings['global'][$setting[0]] = $setting[1];
   }

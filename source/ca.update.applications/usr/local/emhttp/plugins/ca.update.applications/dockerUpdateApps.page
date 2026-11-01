@@ -11,22 +11,8 @@ Title="Docker Auto Update Settings"
 $docroot = $docroot ?: $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 
 
-function searchArray($array,$key,$value) {
-  if ( function_exists("array_column") && function_exists("array_search") ) {   # faster to use built in if it works
-    $result = array_search($value, array_column($array, $key));   
-  } else {
-    $result = false;
-    for ($i = 0; $i <= max(array_keys($array)); $i++) {
-      if ( $array[$i][$key] == $value ) {
-        $result = $i;
-        break;
-      }
-    }
-  }
-  return $result;
-}
-
 require_once("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerClient.php");
+require_once("/usr/local/emhttp/plugins/ca.update.applications/include/dockerAutoUpdate.php");
 
 $dockerRunning = is_dir("/var/lib/docker/tmp") ? "true" : "false";
 
@@ -41,42 +27,33 @@ if ( $dockerRunning == "true" ) {
   $DockerClient = new DockerClient();
   $moreInfo = $DockerClient->getDockerContainers();
 
-  $dockerSettings = "<table><tr>";
-  $containerNames = array_keys($info);
-	$column = 0;
+  $dockerSettings = "<div class='caAutoUpdateGrid'>";
   $hasVisibleContainers = false;
   $ignoreThirdParty = ($dockerUpdateSettings['global']['dockerIgnoreThirdParty'] ?? "no") == "yes";
-  foreach ($containerNames as $container) {
+  # getAllInfo() keeps containers removed outside the Docker page, so loop over the live list
+  foreach ($moreInfo as $liveContainer) {
+    $container = $liveContainer['Name'];
     $class = ($dockerUpdateSettings['containers'][$container]['update'] ?? false) ? "unRaidDockerButton" : null;
-    $index = searchArray($moreInfo,"Name",$container);
-    $repository = ($index === false) ? "Unknown" : $moreInfo[$index]['Image'];
-		$manager = ($index === false) ? false : ($moreInfo[$index]['Manager'] ?? false);
-		if ( $ignoreThirdParty && $manager != "dockerman" ) {
+    $repository = $liveContainer['Image'];
+		if ( $ignoreThirdParty && caAutoUpdateIsThirdParty($liveContainer,$info[$container]) ) {
 			continue;
 		}
 		$hasVisibleContainers = true;
 		$icon = $info[$container]['icon'] ?: "/plugins/dynamix.docker.manager/images/question.png";
-    $dockerSettings .= "<td width:25%;>";
-    $dockerSettings .= "<img src='$icon' width=48px; height=48px;></td>";
-    $dockerSettings .= "<td><strong>$container</strong><br>$repository</td>";
-    $dockerSettings .= "<td><div class='ca-switch-button-background autoUpdateDocker' style='width:25px; height:11px;'onclick='toggleDockerAutoStart(this);'>";
+    $dockerSettings .= "<div class='caAutoUpdateRow'>";
+    $dockerSettings .= "<img src='$icon' width='48' height='48' alt=''>";
+    $dockerSettings .= "<div class='caAutoUpdateName'><strong>$container</strong><br>$repository</div>";
+    $dockerSettings .= "<div class='caAutoUpdateToggle'><div class='ca-switch-button-background autoUpdateDocker' style='width:25px; height:11px;' onclick='toggleDockerAutoStart(this);'>";
     $dockerSettings .= "<div class='$class ca-switch-button-button' style='width:12px; height:11px;' data-docker='$container'>";
     $dockerSettings .= "</div></div>";
     $span = $class ? "<span><font color='red'>".tr("Autoupdate ON",true)."</font></span>" : "<span>".tr("Autoupdate OFF",true)."</span>";
-    $dockerSettings .= "$span</td><td>";
-    if ( $column == 2 ) {
-      $dockerSettings .= "</td></tr><tr>";
-      $column = 0;
-    } else {
-      ++$column;
-      $dockerSettings .= "</td><td>&nbsp;</td><td style='border-right:solid thin;'>&nbsp;</td> <td>&nbsp;</td><td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>   ";
-    }
+    $dockerSettings .= "$span</div></div>";
   }
   if ( ! $hasVisibleContainers ) {
     $emptyStateMessage = $ignoreThirdParty ? "No DockerMan-managed containers available." : "No containers available.";
-    $dockerSettings .= "</tr><tr><td><em>".tr($emptyStateMessage,true)."</em></td></tr>";
+    $dockerSettings .= "<em>".tr($emptyStateMessage,true)."</em>";
   }
-  $dockerSettings .= "</table>";
+  $dockerSettings .= "</div>";
 } else {
   $dockerSettings = "<table><tr><td><center><font size='5' color='purple'>".tr("Docker Must Be Enabled For This Module To Operate",true)."</font></center></td></tr></table>";
   $dockerUpdateSettings['global']['dockerUpdateAll'] = "no";
@@ -139,6 +116,10 @@ function dockerApply() {
     var container = $(this).data("docker");
     autoUpdate.push(container);
   });
+  var offered = new Array();
+  $(".autoUpdateDocker .ca-switch-button-button").each(function() {
+    offered.push($(this).data("docker"));
+  });
   var dockerSettings = new Array();
   $(".dockerSettings").each(function() {
     var setting = $(this).val();
@@ -149,7 +130,7 @@ function dockerApply() {
   var dockerCron = getCronSettings("docker");
   var dockerNotify = $("#dockerNotify").val();
   var dockerUpdateAll = $("#dockerUpdateAll").val();
-  $.post(caURL,{action:'dockerApply',dockerSettings:dockerSettings,autoUpdate:autoUpdate,dockerCron:dockerCron},function(data) {
+  $.post(caURL,{action:'dockerApply',dockerSettings:dockerSettings,autoUpdate:autoUpdate,offered:offered,dockerCron:dockerCron},function(data) {
     if (data) {
       $("#testing").html(data);
     }
@@ -168,13 +149,13 @@ function toggleAll() {
 
 
 </script>
-> <center><a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank"><?tr("Support");?></a></center>
+> <center><a href="https://forums.unraid.net/topic/51959-plugin-ca-application-auto-update/" target="_blank"><?tr("Support");?></a></center>
 > <br>
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
 <div id='testing'></div>
-<div>
-<div style='width:45%;float:left;'>
+<div class='caAutoUpdateColumns'>
+<div class='caAutoUpdateColumn'>
 <table>
 <tr>
   <td><b><?tr("Send Notifications On Update?");?></b></td>
@@ -211,7 +192,7 @@ function toggleAll() {
 </select></td></tr>
 </tr></table>
 </div>
-<div style='width:45%;float:left;'>
+<div class='caAutoUpdateColumn'>
 <table>
 <tr><td><strong><?tr("Day Of Week:")?></strong></td>
 <td><select id='dockerCronDay' class='dockerCron'>
@@ -233,7 +214,6 @@ function toggleAll() {
 <td><input type='text' id='dockerCronCustom' class='dockerCron'></td></tr>
 </table>
 </div></div>
-<br><br>
 <div id='dockerApps'>
 <?=$dockerSettings?>
 </div>
@@ -241,5 +221,5 @@ function toggleAll() {
 <input type='button' id='dockerApply' value='<?tr("Apply");?>' onclick='dockerApply();' disabled><input type='button' value='<?tr("Done");?>' onclick='done();'>
 
 <a style='float:right;cursor:pointer' onclick='showCredits();'><?tr("Credits");?></a><br><br></span>
-<center><a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank"><?tr("Support");?></a></center>
+<center><a href="https://forums.unraid.net/topic/51959-plugin-ca-application-auto-update/" target="_blank"><?tr("Support");?></a></center>
 <center><?tr("Version");?> <strong><span class='caUpdateVersion'></span></strong></center>

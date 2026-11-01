@@ -9,6 +9,7 @@
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: "/usr/local/emhttp";
 
 require_once("/usr/local/emhttp/plugins/dynamix.plugin.manager/include/PluginHelpers.php");
+require_once("/usr/local/emhttp/plugins/ca.update.applications/include/helpers.php");
 
 $communityPaths['autoUpdateKillSwitch']          = "/usr/local/emhttp/plugins/ca.update.applications/autoUpdateKill";
 $communityPaths['autoUpdateSettings']            = "/boot/config/plugins/ca.update.applications/AutoUpdateSettings.json";
@@ -30,6 +31,10 @@ function checkPluginUpdate($filename) {
   }
   if ( $installedVersion < $upgradeVersion ) {
     $unRaid = plugin("min","/tmp/plugins/$filename");
+    $unRaidMax = plugin("max","/tmp/plugins/$filename");
+    if ( $unRaidMax && version_compare($unRaidVersion['version'],$unRaidMax,">") ) {
+      return false;
+    }
     if ( $unRaid === false || version_compare($unRaidVersion['version'],$unRaid,">=") ) {
       return true;
     } else {
@@ -61,7 +66,7 @@ $currentDate = date_create("now");
 foreach ($pluginsInstalled  as $plugin) {
   if ( is_file($communityPaths['autoUpdateKillSwitch']) ) {
     logger("Auto Update Kill Switch Activated.  Most likely details why on the forums");
-    notify("Community Applications","AutoUpdate Kill Switch has been activated.  See Forum for details","","error");
+    notify("Community Applications","AutoUpdate Kill Switch has been activated.  See Forum for details","","","alert");
     break;
   }
   if ( ! is_file("/boot/config/plugins/$plugin") ) {
@@ -80,23 +85,15 @@ foreach ($pluginsInstalled  as $plugin) {
 				array_pop($tmpPlg);
 				$pluginVersion = implode(".",$tmpPlg);
 			}
-      $pluginVersion = preg_replace('/[^0-9.]+/', "", $pluginVersion); # get rid of any alphabetic suffixes on the version date
+      $pluginVersion = preg_replace('/[^0-9.].*$/', "", $pluginVersion); # get rid of any suffix on the version date
       $pluginDate = date_create_from_format("Y.m.d",$pluginVersion);
 
-      if ( ! $pluginDate && $appList['delay'] != 0 && $appList['Global'] != "true") {
+      # Without a date the delay cannot be measured, so only "update all with no delay" installs it
+      if ( ! $pluginDate && ( $appList['delay'] != 0 || ($appList['Global'] ?? "") != "true" ) ) {
         logger("$plugin has a non-conforming version string.  Cannot autoupdate");
         continue;
       }
-      if ( ! $pluginDate ) {
-        logger("$plugin did not return valid date $pluginVersion");
-        continue;
-      }
-      $age = 0;
-      if ( $appList['delay'] != 0 ) {
-        $interval = date_diff($currentDate,$pluginDate);
-        $age = $interval->format("%d");
-				
-      }
+      $age = $pluginDate ? pluginAgeDays($pluginDate,$currentDate) : 0;
       if ( ($age >= $appList['delay']) || ($appList['delay'] == 0) ) {
         logger("Auto Updating $plugin");
  //       exec("mkdir -p /boot/config/plugins-old-versions/$plugin/$installedVersion");
@@ -110,6 +107,9 @@ foreach ($pluginsInstalled  as $plugin) {
         } else {
           foreach ($output as $line) {
             logger($line);
+          }
+          if ( $appList['notify'] != "no" ) {
+            notify("Community Applications","Application Auto Update",$plugin." Update Failed","","warning");
           }
         }
       } else {

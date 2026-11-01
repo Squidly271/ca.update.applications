@@ -1,0 +1,22 @@
+.caAutoUpdateColumns{display:flex;flex-wrap:wrap;justify-content:space-between}
+.caAutoUpdateColumn{flex:0 1 48%;min-width:0}
+.caAutoUpdateColumn table{width:auto}
+.caAutoUpdateColumn td:first-child{padding-right:24px}
+.caAutoUpdateGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));grid-gap:8px 32px;margin:24px 0}
+.caAutoUpdateRow{display:flex;align-items:center;min-width:0}
+.caAutoUpdateRow img{flex:none;margin-right:12px}
+.caAutoUpdateName{flex:1;min-width:0;overflow-wrap:anywhere}
+.caAutoUpdateToggle{flex:none;display:flex;align-items:center;white-space:nowrap}
+#pluginList th:last-child{width:170px}
+#pluginList td:last-child{white-space:nowrap}
+
+/* Only reached from Unraid 7.2; older releases set a fixed desktop viewport */
+@media (max-width:767px){
+  .caAutoUpdateColumn{flex-basis:100%}
+  .caAutoUpdateColumn table,.caAutoUpdateColumn tbody,.caAutoUpdateColumn tr,.caAutoUpdateColumn td{display:block;width:auto;height:auto}
+  .caAutoUpdateColumn select,.caAutoUpdateColumn input{width:100%;min-width:0;box-sizing:border-box}
+  .caAutoUpdateGrid{grid-template-columns:minmax(0,1fr)}
+  #pluginList thead{display:none}
+  #pluginList table,#pluginList tbody,#pluginList tr,#pluginList td{display:block;width:auto;height:auto}
+  #pluginList td:last-child{display:flex;align-items:center}
+}

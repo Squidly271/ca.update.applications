@@ -53,7 +53,7 @@ $updateSettings['delay'] =  ($updateSettings['delay'] ?? "3");
 $updateSettings['pluginCronFrequency'] = ! ($updateSettings['pluginCronFrequency'] ?? false) ? "Daily" : "";
 $globalUpdate = ($updateSettings['Global'] ?? false) == "true" ? "selected" : ""; 
 
-$displayOptions = "<table class='tablesorter'><thead><th>&nbsp;</th><th></th><th></th><th></th></thead><tbody>";
+$displayOptions = "<table class='tablesorter'><thead><th>&nbsp;</th><th></th><th></th></thead><tbody>";
 foreach ($pluginsFolder as $pluginFile) {
 	if ( ( ! is_file("/boot/config/plugins/$pluginFile") ) && ( $pluginFile != "dynamix.plg" ) ) {
 		continue;
@@ -126,6 +126,7 @@ if ( is_array($updateSettings['cron'] ?? null) ) {
 }
 ?>
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/ca.update.applications/styles/switchbutton.css")?>">
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/ca.update.applications/styles/autoUpdate.css")?>">
 <style>
 <?if ($backTopTopIncluded == "false"):?>
 .back-to-top {
@@ -317,13 +318,13 @@ function changeApply() {
 </script>
 <FORM method="get" id="myForm">
 
-> <center><a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank"><?tr("Support");?></a></center>
+> <center><a href="https://forums.unraid.net/topic/51959-plugin-ca-application-auto-update/" target="_blank"><?tr("Support");?></a></center>
 > <br>
 > <center><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG' target='_blank'><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"></a></center>
 
 
-<div>
-<div style='width:45%;float:left;'>
+<div class='caAutoUpdateColumns'>
+<div class='caAutoUpdateColumn'>
 <table>
 <tr><td><strong><?tr("Send Notifications On Update?");?></strong></td>
 <td><select id='notify' size='1' onchange='changeApply();'>
@@ -347,7 +348,7 @@ function changeApply() {
 </select></td></tr>
 </tr></table>
 </div>
-<div style='width:45%;float:left;'>
+<div class='caAutoUpdateColumn'>
 <table>
 
 <tr><td><strong><?tr("Day Of Week:");?></strong></td>
@@ -386,7 +387,7 @@ function changeApply() {
 </a></div>
 
 <a style='float:right;cursor:pointer' onclick='showCredits();'><?tr("Credits");?></a><br><br></span>
-<center><a href="http://lime-technology.com/forum/index.php?topic=53693.0" target="_blank"><?tr("Support");?></a></center>
+<center><a href="https://forums.unraid.net/topic/51959-plugin-ca-application-auto-update/" target="_blank"><?tr("Support");?></a></center>
 <center><?tr("Version");?>: <strong><span class='caUpdateVersion'></span></strong></center>
 
 <span id='testing'></span>
