@@ -80,14 +80,9 @@ foreach ($pluginsInstalled  as $plugin) {
       $installedVersion = plugin("version","/var/log/plugins/$plugin");
       if ( $pluginVersion == $installedVersion) continue;
       if ( ! $pluginVersion ) continue;
-			$tmpPlg = explode(".",$pluginVersion);
-			if (count($tmpPlg) > 3) {
-				array_pop($tmpPlg);
-				$pluginVersion = implode(".",$tmpPlg);
-			}
-      $pluginVersion = preg_replace('/[^0-9.].*$/', "", $pluginVersion); # get rid of any suffix on the version date
+      # The date is the leading yyyy.m.d, after an optional "v"; any later parts or suffixes are build or release numbers
       # "Y" also takes 1 to 3 digits, so without the pattern 1.3.3 would be a date in year 1
-      $pluginDate = preg_match('/^\d{4}\.\d{1,2}\.\d{1,2}$/',$pluginVersion) ? date_create_from_format("Y.m.d",$pluginVersion) : false;
+      $pluginDate = preg_match('/^v?(\d{4}\.\d{1,2}\.\d{1,2})(?!\d)/i',$pluginVersion,$versionDate) ? date_create_from_format("Y.m.d",$versionDate[1]) : false;
 
       # Without a date the delay cannot be measured, so only "update all with no delay" installs it
       if ( ! $pluginDate && ( $appList['delay'] != 0 || ($appList['Global'] ?? "") != "true" ) ) {
