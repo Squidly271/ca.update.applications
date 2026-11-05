@@ -9,6 +9,7 @@ $docroot = $docroot ?? @$_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 $_SERVER['DOCUMENT_ROOT'] = "/usr/local/emhttp";
 
 require_once("/usr/local/emhttp/plugins/dynamix.docker.manager/include/DockerClient.php");
+require_once("/usr/local/emhttp/plugins/ca.update.applications/include/dockerAutoUpdate.php");
 
 function logger($string) {
   $string = escapeshellarg($string);
@@ -49,23 +50,17 @@ foreach ($containers as $container) {
 	$info[$container['Name']]['Name'] = $container['Name'];
 }
 
-// Cached DockerMan info can contain deleted containers; use the live Docker list.
-$allContainers = array_column($containers, 'Name');
-
 $updateAll = $settings['global']['dockerUpdateAll'] == "yes";
 $ignoreThirdParty = ($settings['global']['dockerIgnoreThirdParty'] ?? "no") == "yes";
-$managedBy = array();
-foreach ($containers as $container) {
-	$managedBy[$container['Name']] = $container['Manager'] ?? false;
-}
 
-foreach($allContainers as $container) {
-	if ( ! $container ) continue;
-  if ( $ignoreThirdParty && ($managedBy[$container] ?? false) != "dockerman" ) {
+# getAllInfo() keeps containers removed outside the Docker page, so loop over the live list
+foreach($containers as $liveContainer) {
+  $container = $liveContainer['Name'];
+  if ( $ignoreThirdParty && caAutoUpdateIsThirdParty($liveContainer,$info[$container]) ) {
     logger("Skipping $container (not DockerMan-managed)");
     continue;
   }
-  if ( ! $info[$container]['updated'] || $info[$container]['updated'] == "false" ) {
+  if ( caAutoUpdateHasUpdate($info[$container]) ) {
     if ( ($settings['containers'][$container]['name'] ?? false) || $updateAll ) {
       $updateList[] = $container;
     } else {
@@ -101,7 +96,6 @@ logger("Installing Updates for ".implode(" ",$updateList));
 $_GET['updateContainer'] = true;
 $_GET['ct'] = $updateList;
 include("/usr/local/emhttp/plugins/dynamix.docker.manager/include/CreateDocker.php");
-$containers = $DockerClient->getDockerContainers();
 foreach ($updateList as $containerScript) {
   if ($info[$containerScript]['running']) {
     logger("Restarting $containerScript");
@@ -117,8 +111,19 @@ if ( is_file("/boot/config/plugins/ca.update.applications/scripts/starting/start
   exec("/bin/bash /boot/config/plugins/ca.update.applications/scripts/starting/start_all");
 }
 
+$DockerClient->flushCaches();
+$updated = caAutoUpdateChangedContainers($updateList,$info,$DockerClient->getDockerContainers());
+$notUpdated = array_diff($updateList,$updated);
+if ( $notUpdated ) {
+  logger("Not updated: ".implode(" ",$notUpdated));
+}
 if ( $settings['global']['dockerNotify'] == "yes" ) {
-  notify("Community Applications","Docker Auto Update",implode(" ",$updateList)." Automatically Updated");
+  if ( $updated ) {
+    notify("Community Applications","Docker Auto Update",implode(" ",$updated)." Automatically Updated");
+  }
+  if ( $notUpdated ) {
+    notify("Community Applications","Docker Auto Update",implode(" ",$notUpdated)." Not Updated","","warning");
+  }
 }
 logger("Community Applications Docker Autoupdate finished");
 
