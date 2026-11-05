@@ -15,7 +15,7 @@ function getPost($setting,$default) {
   return isset($_POST[$setting]) ? urldecode(($_POST[$setting])) : $default;
 }
 function getPostArray($setting) {
-  return is_array($_POST[$setting] ?? null) ? $_POST[$setting] : [];
+  return $_POST[$setting] ?? [];
 }
 ##################################################################
 #                                                                #
@@ -36,7 +36,7 @@ function mergeAutoUpdateContainers($saved,$selected,$offered) {
   foreach ($offered as $container) {
     unset($saved[$container]);
   }
-  foreach (array_intersect($selected,$offered) as $container) {
+  foreach ($selected as $container) {
     $saved[$container] = ['name'=>$container,'update'=>true];
   }
   return $saved;
